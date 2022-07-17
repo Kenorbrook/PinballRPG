@@ -1,17 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(menuName = "Enemy", fileName = "CircleDefault")]
-public class EnemyScores : ScriptableObject
+
+namespace Script.Scriptable
 {
-    public enum EnemyType
+    [CreateAssetMenu(menuName = "Enemy", fileName = "CircleDefault")]
+    public class EnemyScores : ScriptableObject
     {
-        DefaultCircle
+        private enum EnemyType
+        {
+            DefaultCircle
+        }
+
+        [SerializeField]
+        private EnemyType type;
+
+        public int hp;
+        public int damage;
+
     }
-
-    [SerializeField] EnemyType type;
-
-    public float hp;
-    public float damage;
-
 }

@@ -1,60 +1,67 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingObj : MonoBehaviour
+namespace Script
 {
-   public enum MovementType{
-        Moving,
-        Lerping
-    }
-
-    public MovementType movementType = MovementType.Moving;
-    public MovementPath Path;
-    public float speed = 1;
-    public float maxDistance = .1f;
-
-    private IEnumerator<Transform> pointInPath;
-
-
-    public void MyStart()
+    public class MovingObj : MonoBehaviour
     {
-        if (Path == null)
+        public enum MovementType
         {
-            return;
+            Moving,
+            Leaping
         }
 
-        pointInPath = Path.GetNextPathPoint();
+        public MovementType movementType = MovementType.Moving;
+        public MovementPath Path;
+        public float speed = 1;
+        public float maxDistance = .1f;
 
-        pointInPath.MoveNext();
+        private IEnumerator<Transform> _pointInPath;
 
-        if(pointInPath.Current == null)
+
+        public void MyStart()
         {
-            return;
+            if (Path == null)
+            {
+                return;
+            }
+
+            _pointInPath = Path.GetNextPathPoint();
+
+            _pointInPath.MoveNext();
+
+            if (_pointInPath.Current == null)
+            {
+                return;
+            }
+
+            //transform.position = _pointInPath.Current.position;
         }
-        transform.position = pointInPath.Current.position;
-    }
 
 
-    private void Update()
-    {
-        if(pointInPath == null || pointInPath.Current == null)
+        private void Update()
         {
-            return;
-        }
-        if(movementType == MovementType.Moving)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, pointInPath.Current.position, Time.deltaTime*speed);
-        }
-        else if (movementType == MovementType.Lerping)
-        {
-            transform.position = Vector2.Lerp(transform.position, pointInPath.Current.position, Time.deltaTime*speed);
-        }
-        var distancesqure = (transform.position - pointInPath.Current.position).sqrMagnitude;
+            if (_pointInPath == null || _pointInPath.Current == null)
+            {
+                return;
+            }
 
-        if(distancesqure < maxDistance * maxDistance)
-        {
-            pointInPath.MoveNext();
+            var _position = transform.position;
+            var _position1 = _pointInPath.Current.position;
+            _position = movementType switch
+            {
+                MovementType.Moving => Vector3.MoveTowards(_position, _position1,
+                    Time.deltaTime * speed),
+                MovementType.Leaping => Vector3.Lerp(_position, _position1,
+                    Time.deltaTime * speed),
+                _ => _position
+            };
+            transform.position = _position;
+            var _disturbance = (_position - _position1).sqrMagnitude;
+            if (_disturbance < maxDistance * maxDistance)
+            {
+                _pointInPath.MoveNext();
+            }
         }
     }
 }
