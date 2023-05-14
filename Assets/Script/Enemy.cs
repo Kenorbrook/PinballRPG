@@ -47,37 +47,44 @@ namespace Script
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.GetComponent<Player>() == null) return;
+            if (!collision.gameObject.CompareTag("Player")) return;
             collision.rigidbody.velocity = Vector2.zero;
             collision.rigidbody.AddForce(-collision.contacts[0].normal * force, ForceMode2D.Impulse);
+        }
+
+        public int TakeDamage(int damage)
+        {
+            int takenDamage = 0;
             if (!isBosses && Math.Abs(_hp - _maxHp) < 0.01)
             {
                 _healthBar.gameObject.SetActive(true);
             }
-
-            _hp -= Player.player.damage;
+            _hp -= damage;
             if (isBosses)
             {
                 _currentScale = boss.GetDamage(_hp, _maxHp, _currentScale);
             }
-
             _healthBar.value = _hp;
             if (_hp <= 0)
             {
+                takenDamage = _hp + damage;
                 GetComponentInParent<Level>().EnemyKilled++;
-                GameManager.StartScore += isBosses ? 10 : 1;
+                GameManager.StartScore += isBosses ? 1000 : 100;
                 //GameManager.RedMoney++;
                 if (isBosses)
                 {
+                    _healthBar.gameObject.SetActive(false);
                     boss.EndAnim();
                 }
                 Destroy(gameObject);
             }
             else
             {
-                if (animScale == null)
-                    animScale = StartCoroutine(hitAnim());
+                takenDamage = damage;
+                animScale ??= StartCoroutine(hitAnim());
             }
+
+            return takenDamage;
         }
 
         private IEnumerator hitAnim()

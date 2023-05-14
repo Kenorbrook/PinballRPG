@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a68f47bd8f649b88765d42378d5d19d, type: 3}
+  m_Name: Berserk
+  m_EditorClassIdentifier: 
+  id: 0
+  sprite: {fileID: 21300000, guid: 6a1d896d73aa35c49a9597b84f560ba1, type: 3}
+  activeSlot: -1
+  effect:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -1255213315354845247, guid: 9d98e9be0dbe8cb4e806782e2c8fde19, type: 3}
+        m_TargetAssemblyTypeName: SkillsData, Assembly-CSharp
+        m_MethodName: BerserkSkill
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000}
+          m_ObjectArgumentAssemblyTypeName: Skill, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  disableEffect:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -1255213315354845247, guid: 9d98e9be0dbe8cb4e806782e2c8fde19, type: 3}
+        m_TargetAssemblyTypeName: SkillsData, Assembly-CSharp
+        m_MethodName: BerserkOffSkill
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  isUltimate: 0
+  skillName: Berserk
+  cooldown:
+  - 16
+  - 14
+  - 12
+  duration:
+  - 12
+  - 12
+  - 12
+  value:
+  - 0.4
+  - 0.5
+  - 0.6
+  cost: f401000058020000bc020000

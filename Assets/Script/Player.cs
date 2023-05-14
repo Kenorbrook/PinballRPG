@@ -1,14 +1,18 @@
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 using Script.Managers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Script
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(TrailRenderer))]
     public class Player : MonoBehaviour
     {
+        private static int health;
         private static int _hp;
+        private static int maxhp = 100;
         public static Player player;
         private Rigidbody2D _rb2d;
 
@@ -24,15 +28,27 @@ namespace Script
 
         private float _ghost;
 
+        public Slider healthBar;
         // public float StartPos;
-        public int damage = 25;
+        private static int Damage => 25;
+        [HideInInspector]
+        public float bonusDamage = 1;
+        [HideInInspector]
+        public float lifeSteel;
+        [HideInInspector]
+        public float defence;
 
+        public Action dealDamage;
+
+        private SpriteRenderer _spriteRenderer;
 
         // Start is called before the first frame update
         void Start()
         {
             Spawn();
-            _hp = 3;
+            _hp = maxhp;
+            health = 3;
+            healthBar.value = (float)_hp/maxhp;
             if (player != null)
             {
                 Destroy(gameObject);
@@ -47,10 +63,9 @@ namespace Script
 
         public void GoUp(int direction)
         {
+            _rb2d.velocity = Vector2.zero;
+            _rb2d.AddForce(new Vector2(-VerticalSpeed * direction, HorizontalSpeed));
             
-                _rb2d.velocity = Vector2.zero;
-                _rb2d.AddForce(new Vector2(-VerticalSpeed * direction, HorizontalSpeed));
-           
         }
 
         public void TrailEmitting()
@@ -61,37 +76,61 @@ namespace Script
 
         public static int GetHp()
         {
-            return _hp;
+            return health;
         }
 
-        public void GetDamage()
+        public void GetDamage(int damage)
         {
-            if (_ghost > 0) return;
-            _hp -= 1;
-            GameManager.instance.UpdateUiHp();
-            if (_hp == 0)
+            if (_ghost > 0 || damage==0) return;
+            _hp -= (int)(damage*(1-defence));
+            if (_hp <= 0)
             {
-                GameManager.LoadMenu();
-                return;
+                if (health == 0)
+                {
+                    GameManager.LoseGame();
+                    return;
+                }
+                health--;
+                _hp = maxhp;
             }
+            healthBar.value = (float)_hp/maxhp;
+            GameManager.instance.UpdateUiHp();
 
             Debug.Log("HP-" + _hp);
-            StartCoroutine(StartGhost());
+            StartGhost();
         }
 
-        private IEnumerator StartGhost()
+        public void StartHeal(float newHealth, float timer)
         {
-            GetComponent<SpriteRenderer>().color = Color.gray;
+           StartCoroutine(Heal(newHealth,timer));
+        }
+        
+        private IEnumerator Heal(float newHealth, float timer)
+        {
+            for (; timer > 0; timer--)
+            {
+                _hp += (int)newHealth;
+                if (_hp > maxhp)
+                    _hp = maxhp;
+                healthBar.value = (float)_hp/maxhp;
+                yield return new WaitForSeconds(1f);
+            }
+        }
+        
+        public async void StartGhost()
+        {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _spriteRenderer.color = Color.gray;
             while (_ghost < 3f)
             {
                 _ghost += 0.5f;
-                yield return new WaitForSeconds(0.5f);
+                await Task.Delay(500);
             }
 
-            GetComponent<SpriteRenderer>().color = Color.black;
+            _spriteRenderer.color = Color.black;
             _ghost = 0;
         }
-
+        
 
         private void Spawn()
         {
@@ -100,10 +139,12 @@ namespace Script
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.GetComponent<Enemy>())
-            {
-                _hp -= collision.gameObject.GetComponent<Enemy>().EnemyScores.damage;
-            }
+            bool isEnemy = collision.gameObject.TryGetComponent(out Enemy _enemy);
+            if (!isEnemy) return;
+            GetDamage(_enemy.EnemyScores.damage); 
+            int takenDamage = _enemy.TakeDamage(damage:(int)(Damage*bonusDamage));
+            _hp += (int)(takenDamage * lifeSteel);
+            dealDamage?.Invoke();
         }
     }
 }

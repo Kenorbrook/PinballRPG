@@ -8,16 +8,18 @@ namespace Script.Managers
 {
     public class GameManager : MonoBehaviour
     {
-        public static PlayerData playerData;
+        public bool isEditor = false;
 
-        public static int RedMoney => playerData.redMoney;
+        public static PlayerData playerData;
 
         public static int Record
         {
             get => playerData.record;
             private set => playerData.record = value;
         }
-        public static int StartScore {
+
+        public static int StartScore
+        {
             get => _startScore;
             set
             {
@@ -29,6 +31,7 @@ namespace Script.Managers
                 }
             }
         }
+
         private static int _startScore;
         public static GameManager instance;
         private static bool _isGameStarted;
@@ -37,21 +40,43 @@ namespace Script.Managers
         public static List<Level> CurrentLevels;
         public static int Level = 0;
 
+        public static Action OpenSkillsSlot;
         public Slider bossSlider;
-        
+
         [SerializeField]
         private Text _score;
 
         private static Text score;
-        
+
         [SerializeField]
         private Image[] Health;
+
+        [SerializeField]
+        private Animation _animRight;
+
+        [SerializeField]
+        private Animation _animLeft;
+
+        [SerializeField]
+        private MovableInStart[] _movable;
+
+        [SerializeField]
+        private GameObject ChooseSkillWindow;
+
         private void Awake()
         {
             Level = 0;
             instance = this;
-            Levels = Resources.LoadAll<Level>("Levels");
-            Bosses = Resources.LoadAll<Level>("Bosses");
+            if (!isEditor)
+            {
+                Levels = Resources.LoadAll<Level>("Levels");
+                Bosses = Resources.LoadAll<Level>("Bosses");
+            }
+            else
+            {
+                Levels = new[] {FindObjectOfType<Level>()};
+            }
+
             score = _score;
         }
 
@@ -64,14 +89,25 @@ namespace Script.Managers
 
         public static void ClickEvent(bool isRight)
         {
-        
             if (!_isGameStarted)
             {
                 _isGameStarted = true;
-                startGame();
+                instance.startGame();
             }
-            Player.player.GoUp(isRight?1:-1);
-        
+
+            Player.player.GoUp(isRight ? 1 : -1);
+            if (!isRight)
+            {
+                instance._animLeft.transform.position = Player.player.transform.position;
+                instance._animLeft.Stop();
+                instance._animLeft.Play();
+            }
+            else
+            {
+                instance._animRight.transform.position = Player.player.transform.position;
+                instance._animRight.Stop();
+                instance._animRight.Play();
+            }
         }
 
         private static void UpdateScoreTextGame()
@@ -79,38 +115,32 @@ namespace Script.Managers
             if (score == null) return;
             score.text = StartScore.ToString();
         }
-#if UNITY_EDITOR
-        private bool go = false;
+
+        private bool _go = false;
+
+
         private void Update()
         {
-           if( Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow))
+            if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.A) ||
+                Input.GetKeyUp(KeyCode.D))
             {
-                go = false;
-            }
-            if (go) return;
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                go = true;
-                if (!_isGameStarted)
-                {
-                    _isGameStarted = true;
-                    startGame();
-                }
-                Player.player.GoUp(1);
+                _go = false;
             }
 
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (_go) return;
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
-                go = true;
-                if (!_isGameStarted)
-                {
-                    _isGameStarted = true;
-                    startGame();
-                }
-                Player.player.GoUp(-1);
+                _go = true;
+                ClickEvent(true);
+            }
+
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            {
+                _go = true;
+                ClickEvent(false);
             }
         }
-#endif
+
         public void UpdateUiHp()
         {
             int _i = 1;
@@ -129,14 +159,33 @@ namespace Script.Managers
                 _i++;
             }
         }
-        
-        private static void startGame()
+
+        public void OpenChoseSkillWindow()
         {
-            var _movable = FindObjectsOfType<MovableInStart>();
+            Player.player.gameObject.SetActive(false);
+            OpenSkillsSlot?.Invoke();
+            ChooseSkillWindow.SetActive(true);
+        }
+
+        public void CloseChoseSkillWindow()
+        {
+            Player.player.gameObject.SetActive(true);
+            ChooseSkillWindow.SetActive(false);
+            Player.player.StartGhost();
+        }
+
+        private void startGame()
+        {
             foreach (var _t in _movable)
             {
                 _t.Move();
             }
+        }
+
+        public static void LoseGame()
+        {
+            //TODO ClearSkills;
+            LoadMenu();
         }
 
         public static void LoadMenu()
@@ -147,7 +196,6 @@ namespace Script.Managers
 
         public static void CreateNewLevel()
         {
-            
         }
     }
 }

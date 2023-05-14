@@ -24,29 +24,32 @@ namespace Script.Managers
 
         public IEnumerator MoveCamera()
         {
+            Player.player.TrailEmitting();
+            Player.player.gameObject.SetActive(false);
             while (_camera.transform.position.y < GameManager.CurrentLevels[GameManager.Level].transform.position.y)
             {
-                _camera.transform.position += new Vector3(0, _speedChangeLevel, 0);
-                if (Player.player.transform.position.y < transform.position.y - _camera.orthographicSize + 0.5f)
+                _camera.transform.position += new Vector3(0, Time.deltaTime*300*_speedChangeLevel, 0);
+                /*if (Player.player.transform.position.y < transform.position.y - _camera.orthographicSize + 0.5f)
                 {
-                    Player.player.transform.position += new Vector3(0, _speedChangeLevel, 0);
-                }
+                    //Player.player.transform.position += new Vector3(0, _speedChangeLevel, 0);
+                    Player.player._rb2d.AddForce(new Vector3(0, 500, 0));
+                }*/
 
                 yield return null;
             }
 
-            if (LevelManagers.isBossFight)
-            {
-                GameManager.CurrentLevels[GameManager.Level]._enemies[0].GetComponent<IBoss>().StartAnim();
-            }
+            //Player.player._rb2d.velocity = new Vector3(0,0,0);
+            Player.player.gameObject.SetActive(true);
+            Player.player.transform.position =
+                new Vector3(0, transform.position.y - _camera.orthographicSize + 0.5f, 0);
             Player.player.TrailEmitting();
-            if (Player.player.transform.position.y < transform.position.y - _camera.orthographicSize + 0.5f)
-            {
-                Player.player.transform.position =
-                    new Vector3(0, transform.position.y - _camera.orthographicSize + 0.5f, 0);
-            }
-            Player.player.TrailEmitting();
-            // Player.player.TrailEmitting();
+            /* Player.player.TrailEmitting();
+             if (Player.player.transform.position.y < transform.position.y - _camera.orthographicSize + 0.5f)
+             {
+                 Player.player.transform.position =
+                     new Vector3(0, transform.position.y - _camera.orthographicSize + 0.5f, 0);
+             }
+             Player.player.TrailEmitting();*/
         }
 
         //  Camera Maincamera;

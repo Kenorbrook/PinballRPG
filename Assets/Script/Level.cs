@@ -17,6 +17,7 @@ namespace Script
             set
             {
                 _enemyKilled = value;
+                if(value==0) return;
                 checkEndOfRound();
             }
         }
@@ -31,11 +32,14 @@ namespace Script
         private void checkEndOfRound()
         {
             Debug.Log($"EnemyKilled - {EnemyKilled}. Enemy on field - {_enemies.Length}");
-            if (EnemyKilled == _enemies.Length)
+            if (EnemyKilled != _enemies.Length) return;
+            if (LevelManagers.isBossFight)
             {
-                //TODO Create new level.
-                LevelManagers.NewLevelCollider.enabled = true;
+                GameManager.instance.OpenChoseSkillWindow();
+                //Open skill chose window
             }
+
+            LevelManagers.NewLevelCollider.enabled = true;
         }
 
         

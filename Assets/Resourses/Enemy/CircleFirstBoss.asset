@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: CircleFirstBoss
   m_EditorClassIdentifier: 
   type: 0
-  hp: 750
+  hp: 2000
   damage: 0

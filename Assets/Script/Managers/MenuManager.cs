@@ -13,8 +13,10 @@ public class MenuManager : MonoBehaviour
 
     [SerializeField]
     private Text _redMoney;
+
     [SerializeField]
     private Text _version;
+
     [SerializeField]
     private Text _record;
 
@@ -23,13 +25,8 @@ public class MenuManager : MonoBehaviour
         _version.text = Application.version;
         _record.text = GameManager.Record.ToString();
         LoadingGameScene = new AsyncOperation[SceneManager.sceneCountInBuildSettings];
-        for (int i = 1; i < LoadingGameScene.Length; i++)
-        {
-            LoadingGameScene[i] = SceneManager.LoadSceneAsync(1);
-            LoadingGameScene[i].allowSceneActivation = false;
-        }
 
+        LoadingGameScene[1] = SceneManager.LoadSceneAsync(1);
+        LoadingGameScene[1].allowSceneActivation = false;
     }
-
-   
 }
