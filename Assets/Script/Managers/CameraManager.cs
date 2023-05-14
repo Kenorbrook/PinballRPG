@@ -34,7 +34,7 @@ namespace Script.Managers
                     //Player.player.transform.position += new Vector3(0, _speedChangeLevel, 0);
                     Player.player._rb2d.AddForce(new Vector3(0, 500, 0));
                 }*/
-
+                
                 yield return null;
             }
 

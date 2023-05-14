@@ -40,6 +40,14 @@ namespace Script
 
         public Action dealDamage;
 
+        public static bool isSpike;
+        public static bool isDischarge;
+
+        [SerializeField]
+        private GameObject _spikes;
+        [SerializeField]
+        private GameObject[] _satellite;
+        
         private SpriteRenderer _spriteRenderer;
 
         // Start is called before the first frame update
@@ -104,6 +112,36 @@ namespace Script
         {
            StartCoroutine(Heal(newHealth,timer));
         }
+
+        private void UseSpikes()
+        {
+            Instantiate(_spikes);
+        }
+
+        public void UseSatellite(int level)
+        {
+            _satellite[0].SetActive(true);
+            switch (level)
+            {
+                case 0:
+                    break;
+                case 1:
+                    _satellite[1].SetActive(true);
+                    break;
+                case 2:
+                    _satellite[2].SetActive(true);
+                    _satellite[3].SetActive(true);
+                    break;
+            }
+        }
+        public void OffSatellite()
+        {
+            foreach (var satellite in _satellite)
+            {
+                if(satellite.activeSelf)
+                    satellite.SetActive(false);
+            }
+        }
         
         private IEnumerator Heal(float newHealth, float timer)
         {
@@ -139,12 +177,29 @@ namespace Script
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
+            if (isSpike)
+            {
+                    UseSpikes();
+            }
             bool isEnemy = collision.gameObject.TryGetComponent(out Enemy _enemy);
             if (!isEnemy) return;
             GetDamage(_enemy.EnemyScores.damage); 
-            int takenDamage = _enemy.TakeDamage(damage:(int)(Damage*bonusDamage));
-            _hp += (int)(takenDamage * lifeSteel);
+            int inflictedDamage = InflictedDamage(_enemy);
+            _hp += (int)(inflictedDamage * lifeSteel);
             dealDamage?.Invoke();
+        }
+
+        public int InflictedDamage(Enemy enemy)
+        {
+           return enemy.TakeDamage(damage:(int)(Damage*bonusDamage));
+        }
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!other.CompareTag("Enemy")) return;
+            if (isDischarge)
+            {
+                    
+            }
         }
     }
 }

@@ -105,4 +105,14 @@ public class SkillsData : MonoBehaviour
     {
         
     }
+
+
+    public void SatelliteSkill(Skill skill)
+    {
+        Player.player.UseSatellite(skill.currentLevel);
+    }
+    public void SatelliteSkillOff()
+    {
+        Player.player.OffSatellite();
+    }
 }
