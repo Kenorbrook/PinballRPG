@@ -29,34 +29,46 @@ namespace Script
         private float _ghost;
 
         public Slider healthBar;
+
         // public float StartPos;
         private static int Damage => 25;
+
         [HideInInspector]
         public float bonusDamage = 1;
+
         [HideInInspector]
         public float lifeSteel;
+
         [HideInInspector]
         public float defence;
 
         public Action dealDamage;
 
         public static bool isSpike;
-        public static bool isDischarge;
+
+        [SerializeField]
+        private Discharge _discharge;
+
+        [SerializeField]
+        private Magnetism _magnetism;
 
         [SerializeField]
         private GameObject _spikes;
+
         [SerializeField]
         private GameObject[] _satellite;
-        
+
         private SpriteRenderer _spriteRenderer;
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             Spawn();
+            isSpike = false;
+            _discharge.gameObject.SetActive(false);
             _hp = maxhp;
             health = 3;
-            healthBar.value = (float)_hp/maxhp;
+            healthBar.value = (float) _hp / maxhp;
             if (player != null)
             {
                 Destroy(gameObject);
@@ -68,12 +80,19 @@ namespace Script
             // StartPos = player.transform.localPosition.y;
         }
 
+        private void FixedUpdate()
+        {
+            if (_magnetism.gameObject.activeSelf)
+            {
+                if (_magnetism.navigationObj == null) return;
+                _rb2d.AddForce((_magnetism.navigationObj.transform.position-transform.position).normalized*_magnetism.force);
+            }
+        }
 
         public void GoUp(int direction)
         {
             _rb2d.velocity = Vector2.zero;
             _rb2d.AddForce(new Vector2(-VerticalSpeed * direction, HorizontalSpeed));
-            
         }
 
         public void TrailEmitting()
@@ -89,8 +108,8 @@ namespace Script
 
         public void GetDamage(int damage)
         {
-            if (_ghost > 0 || damage==0) return;
-            _hp -= (int)(damage*(1-defence));
+            if (_ghost > 0 || damage == 0) return;
+            _hp -= (int) (damage * (1 - defence));
             if (_hp <= 0)
             {
                 if (health == 0)
@@ -98,10 +117,12 @@ namespace Script
                     GameManager.LoseGame();
                     return;
                 }
+
                 health--;
                 _hp = maxhp;
             }
-            healthBar.value = (float)_hp/maxhp;
+
+            healthBar.value = (float) _hp / maxhp;
             GameManager.instance.UpdateUiHp();
 
             Debug.Log("HP-" + _hp);
@@ -110,12 +131,34 @@ namespace Script
 
         public void StartHeal(float newHealth, float timer)
         {
-           StartCoroutine(Heal(newHealth,timer));
+            StartCoroutine(Heal(newHealth, timer));
         }
 
         private void UseSpikes()
         {
-            Instantiate(_spikes);
+            Instantiate(_spikes, transform);
+        }
+
+
+        public void UseDischarge(int damage)
+        {
+            _discharge.gameObject.SetActive(true);
+            _discharge.damage = damage;
+        }
+
+        public void OffDischarge()
+        {
+            _discharge.gameObject.SetActive(false);
+        }
+
+        public void UseMagnetism()
+        {
+            _magnetism.gameObject.SetActive(true);
+        }
+
+        public void OffMagnetism()
+        {
+            _magnetism.gameObject.SetActive(false);
         }
 
         public void UseSatellite(int level)
@@ -134,27 +177,28 @@ namespace Script
                     break;
             }
         }
+
         public void OffSatellite()
         {
             foreach (var satellite in _satellite)
             {
-                if(satellite.activeSelf)
+                if (satellite.activeSelf)
                     satellite.SetActive(false);
             }
         }
-        
+
         private IEnumerator Heal(float newHealth, float timer)
         {
             for (; timer > 0; timer--)
             {
-                _hp += (int)newHealth;
+                _hp += (int) newHealth;
                 if (_hp > maxhp)
                     _hp = maxhp;
-                healthBar.value = (float)_hp/maxhp;
+                healthBar.value = (float) _hp / maxhp;
                 yield return new WaitForSeconds(1f);
             }
         }
-        
+
         public async void StartGhost()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -168,7 +212,7 @@ namespace Script
             _spriteRenderer.color = Color.black;
             _ghost = 0;
         }
-        
+
 
         private void Spawn()
         {
@@ -179,27 +223,20 @@ namespace Script
         {
             if (isSpike)
             {
-                    UseSpikes();
+                UseSpikes();
             }
+
             bool isEnemy = collision.gameObject.TryGetComponent(out Enemy _enemy);
             if (!isEnemy) return;
-            GetDamage(_enemy.EnemyScores.damage); 
+            GetDamage(_enemy.EnemyScores.damage);
             int inflictedDamage = InflictedDamage(_enemy);
-            _hp += (int)(inflictedDamage * lifeSteel);
+            _hp += (int) (inflictedDamage * lifeSteel);
             dealDamage?.Invoke();
         }
 
         public int InflictedDamage(Enemy enemy)
         {
-           return enemy.TakeDamage(damage:(int)(Damage*bonusDamage));
-        }
-        private void OnTriggerEnter(Collider other)
-        {
-            if (!other.CompareTag("Enemy")) return;
-            if (isDischarge)
-            {
-                    
-            }
+            return enemy.TakeDamage(damage: (int) (Damage * bonusDamage));
         }
     }
 }

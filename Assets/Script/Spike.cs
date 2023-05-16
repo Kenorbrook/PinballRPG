@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class Spike : MonoBehaviour
 {
-    private static float force = 50f;
+    private static float force = 500f;
 
     public static int damage;
     // Start is called before the first frame update
     void Start()
     {
-        var _rotation = transform.rotation;
-        GetComponent<Rigidbody2D>().AddForce(new Vector2(force*Mathf.Cos(Mathf.Deg2Rad*_rotation.z),force*Mathf.Sin(Mathf.Deg2Rad*_rotation.z)));
+        var _rotation = transform.rotation.eulerAngles.z;
+        GetComponent<Rigidbody2D>().AddForce(new Vector2(force*Mathf.Cos(_rotation*Mathf.Deg2Rad),force*Mathf.Sin(_rotation*Mathf.Deg2Rad)));
     }
 
     private void OnCollisionEnter2D(Collision2D col)

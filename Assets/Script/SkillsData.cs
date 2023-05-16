@@ -111,8 +111,33 @@ public class SkillsData : MonoBehaviour
     {
         Player.player.UseSatellite(skill.currentLevel);
     }
+    public void DischargeSkill(Skill skill)
+    {
+        Player.player.UseDischarge((int)skill.value[skill.currentLevel]);
+    } 
+    public void DischargeSkillOff()
+    {
+        Player.player.OffDischarge();
+    }
     public void SatelliteSkillOff()
     {
         Player.player.OffSatellite();
+    } 
+    public void MagnetismSkill()
+    {
+        Player.player.UseMagnetism();
+    }
+    public void MagnetismSkillOff()
+    {
+        Player.player.OffMagnetism();
+    } 
+    public void SpikesSkill(Skill skill)
+    {
+        Spike.damage = (int)skill.value[skill.currentLevel];
+        Player.isSpike = true;
+    }
+    public void SpikesSkillOff()
+    {
+        Player.isSpike = false;
     }
 }
