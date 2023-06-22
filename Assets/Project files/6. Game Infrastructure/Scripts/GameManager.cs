@@ -46,9 +46,8 @@ namespace ProjectFiles.LevelInfrastructure
         private Text _score;
 
         private static Text score;
-
-        [SerializeField]
-        private Image[] Health;
+        
+        private static Image[] Health = new Image[3];
 
         [SerializeField]
         private Animation _animRight;
@@ -72,6 +71,8 @@ namespace ProjectFiles.LevelInfrastructure
 
         private void Start()
         {
+            
+
             StartScore = 0;
         }
 
@@ -79,6 +80,11 @@ namespace ProjectFiles.LevelInfrastructure
         {
             if (!_isGameStarted)
             {
+                var healths = GameObject.FindGameObjectsWithTag("Healths");
+                for (var _index = 0; _index < healths.Length; _index++)
+                {
+                    Health[_index] = healths[_index].GetComponent<Image>();
+                }
                 _isGameStarted = true;
                 instance.startGame();
             }

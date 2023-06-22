@@ -70,7 +70,8 @@ namespace ProjectFiles.Player
             _discharge.gameObject.SetActive(false);
             _hp = MAX_HEALTH_POINT;
             health = 3;
-//            healthBar.value = (float) _hp / MAX_HEALTH_POINT;
+            healthBar = GameObject.FindWithTag("HealthBar").GetComponent<Slider>();
+            healthBar.value = (float) _hp / MAX_HEALTH_POINT;
             
             _trail = GetComponent<TrailRenderer>();
             _rb2d = GetComponent<Rigidbody2D>();

@@ -10,6 +10,8 @@ TagManager:
   - Spike
   - PlayerSpawn
   - LevelContainer
+  - HealthBar
+  - Healths
   layers:
   - Default
   - TransparentFX

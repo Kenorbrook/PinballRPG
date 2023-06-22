@@ -45,7 +45,7 @@ namespace ProjectFiles.LevelInfrastructure
             GameManager.Level++;
             NewLevelCollider.enabled = false;
 
-            isBossFight = isBossLevel;
+            //isBossFight = isBossLevel;
             if (false) _levelFactory.CreateRandomBossLevel(Levels); else _levelFactory.CreateRandomLevel(Levels);
 
             StartCoroutine(_mainCamera.GetComponent<TransformationCamera>().MoveCamera());
