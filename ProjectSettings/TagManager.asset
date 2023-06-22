@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - Satellite
   - Spike
+  - PlayerSpawn
+  - LevelContainer
   layers:
   - Default
   - TransparentFX
