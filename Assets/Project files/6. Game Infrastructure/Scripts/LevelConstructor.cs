@@ -25,6 +25,12 @@ namespace ProjectFiles.LevelInfrastructure
             InitDefaultValue();
         }
 
+        private static BossInterface _bossInterface;
+        public static void Construct(BossInterface bossInterface)
+        {
+            _bossInterface = bossInterface;
+        }
+        
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.GetComponent<Player.Player>() == null) return;
@@ -45,17 +51,13 @@ namespace ProjectFiles.LevelInfrastructure
             GameManager.Level++;
             NewLevelCollider.enabled = false;
 
-            //isBossFight = isBossLevel;
-            if (false) _levelFactory.CreateRandomBossLevel(Levels); else _levelFactory.CreateRandomLevel(Levels);
+            isBossFight = isBossLevel;
+            if (isBossFight) _levelFactory.CreateRandomBossLevel(Levels,_bossInterface); else _levelFactory.CreateRandomLevel(Levels);
 
             StartCoroutine(_mainCamera.GetComponent<TransformationCamera>().MoveCamera());
             //DestroyPreviousLevel();
         }
-
-
-        private static void DestroyPreviousLevel() =>
-            Destroy(GameManager.CurrentLevels[GameManager.Level - 1].gameObject, 3f);
-
+        
        
     }
 }

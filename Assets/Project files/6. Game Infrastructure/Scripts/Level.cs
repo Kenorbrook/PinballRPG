@@ -40,10 +40,7 @@ namespace ProjectFiles.LevelInfrastructure
             Debug.Log($"EnemyKilled - {EnemyKilled}. Enemy on field - {_enemies.Length}");
             
             if (!IsAllEnemyKilled) return;
-            
-            if (LevelConstructor.isBossFight)
-                GameManager.instance.OpenChoseSkillWindow();
-            
+
             LevelConstructor.NewLevelCollider.enabled = true;
         }
     }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ProjectFiles.LevelInfrastructure;
+using UnityEngine;
 
 public class GameSceneState : IState
 {
@@ -32,8 +33,11 @@ public class GameSceneState : IState
         GameObject levelContainer = GameObject.FindGameObjectWithTag("LevelContainer");
         var gameFactory = _allServices.GetSingle<IFactory>();
         var levelFactory = _allServices.GetSingle<ILevelConstructFactory>();
-        gameFactory.CreatePlayer(initialPoint);
-        gameFactory.CreateHud();
+        GameObject _hud = gameFactory.CreateHud();
+        gameFactory.CreatePlayer(initialPoint).@interface = _hud.GetComponent<PlayerGameInterface>();
+        GameManager.StartScore = 0;
+        LevelConstructor.Construct(_hud.GetComponent<BossInterface>());
+        gameFactory.CreateSkillData();
         if (isTutorial)
             levelFactory.CreateStartLevel(levelContainer.transform);
         else

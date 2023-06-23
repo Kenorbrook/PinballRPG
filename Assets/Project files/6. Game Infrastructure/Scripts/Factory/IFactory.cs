@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using ProjectFiles.Player;
+using UnityEngine;
 
 public interface IFactory : IService
 {
-    void CreatePlayer(GameObject at);
-    void CreateHud();
+    Player CreatePlayer(GameObject at);
+    GameObject CreateHud();
+    GameObject CreateSkillData();
 
 }

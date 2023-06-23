@@ -113,7 +113,7 @@ namespace Michsky.MUIP
                     {
                         GUILayout.BeginVertical(EditorStyles.helpBox);
                         isHighlighted.boolValue = MUIPEditorHandler.DrawTogglePlain(isHighlighted.boolValue, customSkin, "isHighlighted");
-                        GUILayout.Space(-3);
+                        GUILayout.Space(4);
 
                         enableIcon.boolValue = MUIPEditorHandler.DrawTogglePlain(enableIcon.boolValue, customSkin, "Enable Icon");
 

@@ -306,7 +306,7 @@ namespace Michsky.MUIP
             if (isInteractable == false)
                 return;
 
-            if (enableButtonSounds == true && useClickSound == true && soundSource != null) { soundSource.PlayOneShot(hoverSound); }
+            if (enableButtonSounds == true && useHoverSound == true && soundSource != null) { soundSource.PlayOneShot(hoverSound); }
             if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine("SetHighlight"); }
 
             isPointerOn = true;

@@ -10,15 +10,20 @@ public class LevelFactory : IFactory
         _assetProvider = assetProvider;
     }
 
-    public void CreatePlayer(GameObject at)
+    public Player CreatePlayer(GameObject at)
     {
         Player.player = _assetProvider.Instantiate(path: PathResources.PLAYER, at).GetComponent<Player>();
         Player.player.SpawnPoint = at;
+        return Player.player;
     }
 
-    public void CreateHud()
+    public GameObject CreateHud()
     {
-        _assetProvider.Instantiate(path: PathResources.INTERFACE);
+        return _assetProvider.Instantiate(path: PathResources.INTERFACE);
+    } 
+    public GameObject CreateSkillData()
+    {
+        return _assetProvider.Instantiate(path: PathResources.SKILL_DATA);
     }
     
 }

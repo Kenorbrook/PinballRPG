@@ -17,9 +17,12 @@ namespace ProjectFiles.Enemies
         private int _currentHp;
         private Slider _healthBar;
         private SpriteRenderer _sprite;
+
         private float _currentScale;
+
         //TODO развязать босса и врага...
-        private IBoss _boss;
+        
+        private Boss _boss;
         private Coroutine _animScale;
 
         private new void Start()
@@ -48,9 +51,8 @@ namespace ProjectFiles.Enemies
             }
             else
             {
-                _healthBar = GameManager.instance.bossSlider;
-                _healthBar.gameObject.SetActive(true);
-                _boss = GetComponent<IBoss>();
+                _boss = GetComponent<Boss>();
+                _healthBar = _boss.@interface.GetHealthBar();
             }
         }
 
@@ -83,7 +85,6 @@ namespace ProjectFiles.Enemies
                 GameManager.StartScore += EnemyScores.type == EnemyScores.EnemyType.Boss ? 1000 : 100;
                 if (EnemyScores.type == EnemyScores.EnemyType.Boss)
                 {
-                    _healthBar.gameObject.SetActive(false);
                     _boss.EndAnim();
                 }
 
@@ -102,14 +103,15 @@ namespace ProjectFiles.Enemies
         {
             Vector3 _vec;
             float _endScale;
+            float animSpeed = _currentScale / 100;
             if (EnemyScores.type == EnemyScores.EnemyType.Boss)
             {
-                _vec = new Vector3(0.01f, 0.01f, 0);
+                _vec = new Vector3(animSpeed, animSpeed, 0);
                 _endScale = _currentScale * 1.1f;
             }
             else
             {
-                _vec = new Vector3(0.001f, 0.001f, 0);
+                _vec = new Vector3(animSpeed, animSpeed, 0);
                 _endScale = _currentScale * 1.3f;
             }
 

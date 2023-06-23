@@ -19,18 +19,19 @@
         _sceneLoader.Load(BOOT_SCENE, EnterLoadLevel);
     }
 
-    private void EnterLoadLevel() => _stateMachine.Enter<LoadLevelState, string>(MAIN_MENU_SCENE);
-
     public void Exit()
     {
     }
 
+    private void EnterLoadLevel() => _stateMachine.Enter<LoadLevelState, string>(MAIN_MENU_SCENE);
+
     private void RegisterServices()
     {
         _allServices.RegisterServiceAsSingle<IAssetProvider>(new AssetProvider());
+        _allServices.RegisterServiceAsSingle<IAssetLevelProvider>(new AssetLevelProvider());
         _allServices.RegisterServiceAsSingle<ISceneLoader>(_sceneLoader);
         _allServices.RegisterServiceAsSingle<IFactory>(new LevelFactory(_allServices.GetSingle<IAssetProvider>()));
         _allServices.RegisterServiceAsSingle<ILevelConstructFactory>(
-            new LevelConstructFactory(_allServices.GetSingle<IAssetProvider>()));
+            new LevelConstructFactory(_allServices.GetSingle<IAssetLevelProvider>()));
     }
 }

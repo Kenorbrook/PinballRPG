@@ -5,16 +5,19 @@ using ProjectFiles.Enemies;
 using ProjectFiles.LevelInfrastructure;
 using ProjectFiles.Skills;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ProjectFiles.Player
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(TrailRenderer))]
     public class Player : MonoBehaviour
     {
+        public PlayerGameInterface @interface;
+        
         private static int health;
         private static int _hp;
         private const int MAX_HEALTH_POINT = 100;
+        
+        
         public static Player player;
         private Rigidbody2D _rb2d;
 
@@ -29,8 +32,6 @@ namespace ProjectFiles.Player
         public GameObject SpawnPoint;
 
         private float _ghost;
-
-        private Slider healthBar;
 
         // public float StartPos;
         private static int Damage => 25;
@@ -70,8 +71,8 @@ namespace ProjectFiles.Player
             _discharge.gameObject.SetActive(false);
             _hp = MAX_HEALTH_POINT;
             health = 3;
-            healthBar = GameObject.FindWithTag("HealthBar").GetComponent<Slider>();
-            healthBar.value = (float) _hp / MAX_HEALTH_POINT;
+            @interface.UpdateHealthBar((float) _hp / MAX_HEALTH_POINT);
+            @interface.UpdateHealth(health);
             
             _trail = GetComponent<TrailRenderer>();
             _rb2d = GetComponent<Rigidbody2D>();
@@ -121,8 +122,8 @@ namespace ProjectFiles.Player
                 _hp = MAX_HEALTH_POINT;
             }
 
-            healthBar.value = (float) _hp / MAX_HEALTH_POINT;
-            GameManager.instance.UpdateUiHp();
+            @interface.UpdateHealthBar((float) _hp / MAX_HEALTH_POINT);
+            @interface.UpdateHealth(health);
 
             Debug.Log("HP-" + _hp);
             StartGhost();
@@ -210,7 +211,7 @@ namespace ProjectFiles.Player
                 _hp += (int) newHealth;
                 if (_hp > MAX_HEALTH_POINT)
                     _hp = MAX_HEALTH_POINT;
-                healthBar.value = (float) _hp / MAX_HEALTH_POINT;
+                @interface.UpdateHealthBar((float) _hp / MAX_HEALTH_POINT);
                 yield return new WaitForSeconds(1f);
             }
         }

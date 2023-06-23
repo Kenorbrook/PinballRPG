@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ProjectFiles.LevelInfrastructure;
@@ -8,18 +9,37 @@ namespace ProjectFiles.Skills
 {
     public class SessionSkillChooser : MonoBehaviour
     {
+        
         private const int DefaultNUllNumber = -1;
         private const int ULTIMATE_SLOT = 2;
 
         [SerializeField]
+        private GameObject _chooseSkillPanel;
+        [SerializeField]
         private Button[] skillsButton;
 
+        [SerializeField]
+        private Image[] _skillImage;
+        
         private List<Skill> _currentSkills;
         private List<Skill> _allPlayerSkill;
         private Skill[] _slotSkills;
 
         [SerializeField]
         private Image[] _slotsIcon;
+        
+        
+        [SerializeField]
+        private Sprite _maskCircle;
+        [SerializeField]
+        private Sprite _maskBox;
+        
+        [SerializeField]
+        private Image[] _mask;
+        [SerializeField]
+        private Image[] _maskStroke;
+        [SerializeField]
+        private Image[] _maskBackground;
 
         [SerializeField]
         private GameObject[] _slotsBuyingIcon;
@@ -34,6 +54,8 @@ namespace ProjectFiles.Skills
 
         private const string NULL_COST_TEXT = "0_0";
 
+        private event Action OpenSkillsSlot;
+
         private void Start()
         {
             _slotSkillId = new int[3];
@@ -44,12 +66,26 @@ namespace ProjectFiles.Skills
 
         private void OnEnable()
         {
-            GameManager.OpenSkillsSlot += SetSkillsInSlots;
+            OpenSkillsSlot += SetSkillsInSlots;
         }
 
         private void OnDisable()
         {
-            GameManager.OpenSkillsSlot -= SetSkillsInSlots;
+            OpenSkillsSlot -= SetSkillsInSlots;
+        }
+
+        public void OpenChoseSkillWindow()
+        {
+            Player.Player.player.gameObject.SetActive(false);
+            OpenSkillsSlot?.Invoke();
+            _chooseSkillPanel.SetActive(true);
+        }
+
+        public void CloseChoseSkillWindow()
+        {
+            Player.Player.player.gameObject.SetActive(true);
+            _chooseSkillPanel.SetActive(false);
+            Player.Player.player.StartGhost();
         }
 
         private void SetSkillsInSlots()
@@ -73,9 +109,20 @@ namespace ProjectFiles.Skills
             _slotSkills[0] = _randomSkill;
             _slotsIcon[0].sprite = _randomSkill.sprite;
             _slotSkillId[0] = _randomSkill.Id;
-            Debug.Log(_randomSkill.currentLevel);
             _slotsCost[0].text = _randomSkill.GetCost().ToString();
             _skillName[0].text = _randomSkill.name;
+            if (_randomSkill.isUltimate)
+            {
+                _mask[0].sprite = _maskBox;
+                _maskStroke[0].sprite = _maskBox;
+                _maskBackground[0].sprite = _maskBox;
+            }
+            else
+            {
+                _mask[0].sprite = _maskCircle;
+                _maskStroke[0].sprite = _maskCircle;
+                _maskBackground[0].sprite = _maskCircle;
+            }
             _randomSkill = SkillsData.GetRandomSkill();
             if (_randomSkill == null)
             {
@@ -95,6 +142,18 @@ namespace ProjectFiles.Skills
             _slotSkillId[1] = _randomSkill.Id;
             _slotsCost[1].text = _randomSkill.GetCost().ToString();
             _skillName[1].text = _randomSkill.name;
+            if (_randomSkill.isUltimate)
+            {
+                _mask[1].sprite = _maskBox;
+                _maskStroke[1].sprite = _maskBox;
+                _maskBackground[1].sprite = _maskBox;
+            }
+            else
+            {
+                _mask[1].sprite = _maskCircle;
+                _maskStroke[1].sprite = _maskCircle;
+                _maskBackground[1].sprite = _maskCircle;
+            }
             _randomSkill = SkillsData.GetRandomSkill();
             if (_randomSkill == null)
             {
@@ -105,7 +164,18 @@ namespace ProjectFiles.Skills
                 _slotsBuyingIcon[2].SetActive(true);
                 return;
             }
-
+            if (_randomSkill.isUltimate)
+            {
+                _mask[2].sprite = _maskBox;
+                _maskStroke[2].sprite = _maskBox;
+                _maskBackground[2].sprite = _maskBox;
+            }
+            else
+            {
+                _mask[2].sprite = _maskCircle;
+                _maskStroke[2].sprite = _maskCircle;
+                _maskBackground[2].sprite = _maskCircle;
+            }
             _slotsIcon[2].sprite = _randomSkill.sprite;
             _slotsBuyingIcon[2].SetActive(false);
             _slotSkills[2] = _randomSkill;
@@ -197,7 +267,7 @@ namespace ProjectFiles.Skills
 
             skillsButton[number].onClick.RemoveAllListeners();
             skillsButton[number].onClick.AddListener(Call);
-            skillsButton[number].GetComponent<Image>().sprite = _currentSkill.sprite;
+            _skillImage[number].sprite = _currentSkill.sprite;
         }
 
         private void AddNewSkill(int newSkillId)
