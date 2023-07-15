@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ProjectFiles.MovingObjects
 {
-    public class MovingObj : MonoBehaviour
+    public class MovingObjectOnPath : MonoBehaviour
     {
         public enum MovementType
         {

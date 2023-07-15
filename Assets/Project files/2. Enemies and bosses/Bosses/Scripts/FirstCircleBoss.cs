@@ -45,7 +45,7 @@ namespace ProjectFiles.Bosses
         {
             if (Math.Abs(hp - maxHp / 4) < 20 && _stage < 3)
             {
-                var _moving = GetComponent<MovingObj>();
+                var _moving = GetComponent<MovingObjectOnPath>();
                 _stage++;
                 _moving.Path = _secondPath;
                 _moving.Start();

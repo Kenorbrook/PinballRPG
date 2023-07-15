@@ -7,7 +7,7 @@ namespace ProjectFiles.Skills
     {
         private void OnTriggerEnter2D(Collider2D other)
         {
-            bool isEnemy = other.TryGetComponent(out Enemy _enemy);
+            bool isEnemy = other.TryGetComponent(out IChangeHealth _enemy);
             if (!isEnemy) return;
             Player.Player.player.InflictedDamage(_enemy);
             

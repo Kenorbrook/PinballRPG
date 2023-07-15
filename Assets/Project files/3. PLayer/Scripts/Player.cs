@@ -243,15 +243,14 @@ namespace ProjectFiles.Player
                 UseSpikes();
             }
 
-            bool isEnemy = collision.gameObject.TryGetComponent(out Enemy _enemy);
+            bool isEnemy = collision.gameObject.TryGetComponent(out IChangeHealth _enemy);
             if (!isEnemy) return;
-            GetDamage(_enemy.EnemyScores.damage);
             int inflictedDamage = InflictedDamage(_enemy);
             _hp += (int) (inflictedDamage * lifeSteel);
             dealDamage?.Invoke();
         }
 
-        public int InflictedDamage(Enemy enemy)
+        public int InflictedDamage(IChangeHealth enemy)
         {
             return enemy.TakeDamage(damage: (int) (Damage * bonusDamage));
         }

@@ -41,7 +41,7 @@ namespace ProjectFiles.Skills
 
             Debug.Log("Hit enemy with skill");
             Effect(col.transform.position);
-            Enemy _enemy = col.GetComponent<Enemy>();
+            IChangeHealth _enemy = col.GetComponent<IChangeHealth>();
             _enemy.TakeDamage(damage);
         }
 

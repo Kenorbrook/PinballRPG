@@ -18,7 +18,7 @@ namespace ProjectFiles.Skills
 
         private void OnCollisionEnter2D(Collision2D col)
         {
-            bool isEnemy = col.gameObject.TryGetComponent(out Enemy _enemy);
+            bool isEnemy = col.gameObject.TryGetComponent(out IChangeHealth _enemy);
             if (isEnemy)
             {
                 _enemy.TakeDamage(damage: damage);
