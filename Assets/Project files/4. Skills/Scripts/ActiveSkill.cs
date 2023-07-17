@@ -25,6 +25,7 @@ namespace ProjectFiles.Skills
         public float[] duration = new float[3];
         public float[] value = new float[3];
 
+        public string description;
         [SerializeField]
         private int[] cost = new int[3];
         public int maybeLevel { get; private set; }
@@ -58,9 +59,13 @@ namespace ProjectFiles.Skills
             return currentLevel + maybeLevel;
         }
 
+        public int GetCost(int level)
+        {
+            return cost[level];
+        }  
         public int GetCost()
         {
-            return cost[currentLevel + 1];
+            return cost[currentLevel+1];
         }
 
         public void ClearSkill()

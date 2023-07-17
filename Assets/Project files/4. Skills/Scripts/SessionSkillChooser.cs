@@ -14,6 +14,8 @@ namespace ProjectFiles.Skills
         private const int ULTIMATE_SLOT = 2;
 
         [SerializeField]
+        private InfoSkillPanel _infoSkillPanel;
+        [SerializeField]
         private GameObject _chooseSkillPanel;
         [SerializeField]
         private Button[] skillsButton;
@@ -55,9 +57,11 @@ namespace ProjectFiles.Skills
         private const string NULL_COST_TEXT = "0_0";
 
         private event Action OpenSkillsSlot;
+        private int _choosenSkill;
 
         private void Start()
         {
+            _infoSkillPanel.Init(this);
             _slotSkillId = new int[3];
             _slotSkills = new Skill[3];
             _currentSkills = new List<Skill>();
@@ -111,6 +115,7 @@ namespace ProjectFiles.Skills
             _slotSkillId[0] = _randomSkill.Id;
             _slotsCost[0].text = _randomSkill.GetCost().ToString();
             _skillName[0].text = _randomSkill.name;
+            skillsButton[0].interactable = true;
             if (_randomSkill.isUltimate)
             {
                 _mask[0].sprite = _maskBox;
@@ -142,6 +147,7 @@ namespace ProjectFiles.Skills
             _slotSkillId[1] = _randomSkill.Id;
             _slotsCost[1].text = _randomSkill.GetCost().ToString();
             _skillName[1].text = _randomSkill.name;
+            skillsButton[1].interactable = true;
             if (_randomSkill.isUltimate)
             {
                 _mask[1].sprite = _maskBox;
@@ -185,6 +191,7 @@ namespace ProjectFiles.Skills
             _slotSkills[0].ClearMaybeLevel();
             _slotSkills[1].ClearMaybeLevel();
             _slotSkills[2].ClearMaybeLevel();
+            skillsButton[2].interactable = true;
         }
 
         private void UpdateSlotsSkillsCost()
@@ -195,44 +202,50 @@ namespace ProjectFiles.Skills
                     _slotsCost[_index].text = _slotSkills[_index].GetCost().ToString();
             }
         }
-
         public void ChooseSkill(int button)
         {
-            if (GameManager.StartScore < SkillsData.GetSkillFromId(_slotSkillId[button]).GetCost()) return;
-            GameManager.StartScore -= SkillsData.GetSkillFromId(_slotSkillId[button]).GetCost();
-            _slotsBuyingIcon[button].SetActive(true);
-            _slotSkills[button].LevelUp();
-            bool _exists = _allPlayerSkill.Exists(x => x.Id == _slotSkillId[button]);
+            _choosenSkill = button;
+            _infoSkillPanel.OpenInfoPanel(_slotSkills[button]);
+        }
+        
+        public void BuySkill(Skill skill)
+        {
+            if (GameManager.StartScore < SkillsData.GetSkillFromId(skill.Id).GetCost()) return;
+            GameManager.StartScore -= SkillsData.GetSkillFromId(skill.Id).GetCost();
+            _slotsBuyingIcon[_choosenSkill].SetActive(true);
+            skillsButton[_choosenSkill].interactable = false;
+            _slotSkills[_choosenSkill].LevelUp();
+            bool _exists = _allPlayerSkill.Exists(x => x.Id == _slotSkillId[_choosenSkill]);
             if (!_exists)
             {
                 if (_currentSkills.Count == 3)
                 {
-                    AddNewSkill(_slotSkillId[button]);
+                    AddNewSkill(_slotSkillId[_choosenSkill]);
                     UpdateSlotsSkillsCost();
                     return;
                 }
 
-                Skill _skill = _slotSkills[button];
-                if (_skill.isUltimate && _currentSkills.Exists(x => x.activeSlot == ULTIMATE_SLOT))
-                    AddNewSkill(_slotSkillId[button]);
-                else if (_skill.isUltimate)
-                    AddNewSkillInSlot(_slotSkillId[button], ULTIMATE_SLOT);
+                if (skill.isUltimate && _currentSkills.Exists(x => x.activeSlot == ULTIMATE_SLOT))
+                    AddNewSkill(_slotSkillId[_choosenSkill]);
+                else if (skill.isUltimate)
+                    AddNewSkillInSlot(_slotSkillId[_choosenSkill], ULTIMATE_SLOT);
                 else if (_currentSkills.Exists(x => x.activeSlot == ULTIMATE_SLOT))
                 {
-                    AddNewSkillInSlot(_slotSkillId[button]);
+                    AddNewSkillInSlot(_slotSkillId[_choosenSkill]);
                 }
                 else if (_currentSkills.Count == 2)
                 {
-                    AddNewSkill(_slotSkillId[button]);
+                    AddNewSkill(_slotSkillId[_choosenSkill]);
                 }
                 else
                 {
-                    AddNewSkillInSlot(_slotSkillId[button]);
+                    AddNewSkillInSlot(_slotSkillId[_choosenSkill]);
                 }
             }
 
             UpdateSlotsSkillsCost();
         }
+        
 
         private void AddNewSkillInSlot(int newSkillId, int slot = DefaultNUllNumber)
         {
@@ -268,6 +281,16 @@ namespace ProjectFiles.Skills
             skillsButton[number].onClick.RemoveAllListeners();
             skillsButton[number].onClick.AddListener(Call);
             _skillImage[number].sprite = _currentSkill.sprite;
+        }    
+        private void RemoveSkillFromSlot(Skill removedSkill, int slot = DefaultNUllNumber)
+        {
+
+            _currentSkills.Remove(removedSkill);
+
+            skillsButton[slot].onClick.RemoveAllListeners();
+            skillsButton[slot].gameObject.SetActive(false);
+            removedSkill.activeSlot = -1;
+            
         }
 
         private void AddNewSkill(int newSkillId)
@@ -282,7 +305,7 @@ namespace ProjectFiles.Skills
             Skill oldSkill = _currentSkills.Find(x => x.Id == oldSkillId);
             Skill newSkill = SkillsData.GetSkillFromId(newSkillId);
             if ((oldSkill.isUltimate && !newSkill.isUltimate) || (!oldSkill.isUltimate && newSkill.isUltimate)) return;
-            _currentSkills.Remove(oldSkill);
+            RemoveSkillFromSlot(oldSkill);
             AddNewSkillInSlot(newSkillId, oldSkill.activeSlot);
         }
     }
