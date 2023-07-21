@@ -1,5 +1,7 @@
+using System;
 using ProjectFiles.Enemies;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace ProjectFiles.LevelInfrastructure
 {
@@ -7,7 +9,12 @@ namespace ProjectFiles.LevelInfrastructure
     {
         private int _enemyKilled;
         public int LevelId;
+
+        [HideInInspector]
         public Enemy[] _enemies;
+
+        [SerializeField]
+        private List[] _levelVariables;
 
         public int height;
         private bool IsAllEnemyKilled => EnemyKilled == _enemies.Length;
@@ -27,21 +34,40 @@ namespace ProjectFiles.LevelInfrastructure
         private void Start()
         {
             InitDefaultValues();
+            DisableObjectForVariable();
+        }
+
+        private void DisableObjectForVariable()
+        {
+            if (_levelVariables == null || _levelVariables.Length <= 0) return;
+
+            int variable = Random.Range(0, _levelVariables.Length);
+            foreach (var objects in _levelVariables[variable].levelObjects)
+            {
+                objects.SetActive(false);
+            }
         }
 
         private void InitDefaultValues()
         {
             _enemies = GetComponentsInChildren<Enemy>();
             EnemyKilled = 0;
+            checkEndOfRound();
         }
 
         private void checkEndOfRound()
         {
             Debug.Log($"EnemyKilled - {EnemyKilled}. Enemy on field - {_enemies.Length}");
-            
+
             if (!IsAllEnemyKilled) return;
 
             LevelConstructor.NewLevelCollider.enabled = true;
+        }
+
+        [Serializable]
+        private class List
+        {
+            public GameObject[] levelObjects;
         }
     }
 }

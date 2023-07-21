@@ -12,8 +12,8 @@ namespace ProjectFiles.MovingObjects
         }
 
         public PathType pathType;
-        public int movementDirection = 1;
-        public int movingTo;
+        private int _movementDirection = 1;
+        private int _movingTo;
         public Transform[] PathElements;
 
         private void OnDrawGizmos()
@@ -41,7 +41,7 @@ namespace ProjectFiles.MovingObjects
                 yield break;
             while (true)
             {
-                yield return PathElements[movingTo];
+                yield return PathElements[_movingTo];
 
                 if (PathElements.Length == 1)
                 {
@@ -50,27 +50,27 @@ namespace ProjectFiles.MovingObjects
 
                 if (pathType == PathType.Liner)
                 {
-                    if (movingTo <= 0)
+                    if (_movingTo <= 0)
                     {
-                        movementDirection = 1;
+                        _movementDirection = 1;
                     }
-                    else if (movingTo >= PathElements.Length - 1)
+                    else if (_movingTo >= PathElements.Length - 1)
                     {
-                        movementDirection = -1;
+                        _movementDirection = -1;
                     }
                 }
 
-                movingTo += movementDirection;
+                _movingTo += _movementDirection;
 
                 if (pathType != PathType.Loop) continue;
-                if (movingTo >= PathElements.Length)
+                if (_movingTo >= PathElements.Length)
                 {
-                    movingTo = 0;
+                    _movingTo = 0;
                 }
 
-                if (movingTo < 0)
+                if (_movingTo < 0)
                 {
-                    movingTo = PathElements.Length - 1;
+                    _movingTo = PathElements.Length - 1;
                 }
             }
         }

@@ -200,11 +200,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 920936eff9bb13e4ab244dfa1e56e01d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossSlider: {fileID: 0}
   _score: {fileID: 0}
   _animRight: {fileID: 110871496}
   _animLeft: {fileID: 1788802426}
-  ChooseSkillWindow: {fileID: 0}
 --- !u!4 &251856506
 Transform:
   m_ObjectHideFlags: 0
