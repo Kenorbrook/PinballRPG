@@ -2353,7 +2353,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelId: 1
   _enemies: []
-  _levelVariables: []
+  _levelVariables:
+  - levelObjects:
+    - {fileID: 9056236599913533199}
+  - levelObjects:
+    - {fileID: 9056236599913533199}
   height: 12
 --- !u!1 &8270843559247460073
 GameObject:
@@ -3148,14 +3152,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 21ae9754596c02d44831e076b7494550, type: 3}
---- !u!4 &6508630157991753521 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1608225589053207384, guid: 21ae9754596c02d44831e076b7494550, type: 3}
-  m_PrefabInstance: {fileID: 5477182006427878505}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6508630156935430310 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1608225590119466191, guid: 21ae9754596c02d44831e076b7494550, type: 3}
+  m_PrefabInstance: {fileID: 5477182006427878505}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6508630157991753521 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1608225589053207384, guid: 21ae9754596c02d44831e076b7494550, type: 3}
   m_PrefabInstance: {fileID: 5477182006427878505}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6207766728567638022
@@ -3767,14 +3771,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 21ae9754596c02d44831e076b7494550, type: 3}
---- !u!4 &9056236599913533184 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1608225589053207384, guid: 21ae9754596c02d44831e076b7494550, type: 3}
-  m_PrefabInstance: {fileID: 7782122933765897304}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9056236600929482903 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1608225590119466191, guid: 21ae9754596c02d44831e076b7494550, type: 3}
+  m_PrefabInstance: {fileID: 7782122933765897304}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &9056236599913533199 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1608225589053207383, guid: 21ae9754596c02d44831e076b7494550, type: 3}
+  m_PrefabInstance: {fileID: 7782122933765897304}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9056236599913533184 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1608225589053207384, guid: 21ae9754596c02d44831e076b7494550, type: 3}
   m_PrefabInstance: {fileID: 7782122933765897304}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7878385748398878395

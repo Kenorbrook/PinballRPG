@@ -2749,6 +2749,10 @@ PrefabInstance:
       propertyPath: PathElements.Array.data[18]
       value: 
       objectReference: {fileID: 5152678987229965125}
+    - target: {fileID: 5019334996063371205, guid: 21ae9754596c02d44831e076b7494550, type: 3}
+      propertyPath: maximumHealth
+      value: 250
+      objectReference: {fileID: 0}
     - target: {fileID: 5719853067959598984, guid: 21ae9754596c02d44831e076b7494550, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
