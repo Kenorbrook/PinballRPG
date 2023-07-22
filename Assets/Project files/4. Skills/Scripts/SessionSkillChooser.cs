@@ -115,7 +115,6 @@ namespace ProjectFiles.Skills
             _slotSkillId[0] = _randomSkill.Id;
             _slotsCost[0].text = _randomSkill.GetCost().ToString();
             _skillName[0].text = _randomSkill.name;
-            skillsButton[0].interactable = true;
             if (_randomSkill.isUltimate)
             {
                 _mask[0].sprite = _maskBox;
@@ -147,7 +146,6 @@ namespace ProjectFiles.Skills
             _slotSkillId[1] = _randomSkill.Id;
             _slotsCost[1].text = _randomSkill.GetCost().ToString();
             _skillName[1].text = _randomSkill.name;
-            skillsButton[1].interactable = true;
             if (_randomSkill.isUltimate)
             {
                 _mask[1].sprite = _maskBox;
@@ -191,7 +189,6 @@ namespace ProjectFiles.Skills
             _slotSkills[0].ClearMaybeLevel();
             _slotSkills[1].ClearMaybeLevel();
             _slotSkills[2].ClearMaybeLevel();
-            skillsButton[2].interactable = true;
         }
 
         private void UpdateSlotsSkillsCost()
@@ -208,12 +205,11 @@ namespace ProjectFiles.Skills
             _infoSkillPanel.OpenInfoPanel(_slotSkills[button]);
         }
         
-        public void BuySkill(Skill skill)
+        public bool BuySkill(Skill skill)
         {
-            if (GameManager.StartScore < SkillsData.GetSkillFromId(skill.Id).GetCost()) return;
+            if (GameManager.StartScore < SkillsData.GetSkillFromId(skill.Id).GetCost()) return false;
             GameManager.StartScore -= SkillsData.GetSkillFromId(skill.Id).GetCost();
             _slotsBuyingIcon[_choosenSkill].SetActive(true);
-            skillsButton[_choosenSkill].interactable = false;
             _slotSkills[_choosenSkill].LevelUp();
             bool _exists = _allPlayerSkill.Exists(x => x.Id == _slotSkillId[_choosenSkill]);
             if (!_exists)
@@ -222,7 +218,7 @@ namespace ProjectFiles.Skills
                 {
                     AddNewSkill(_slotSkillId[_choosenSkill]);
                     UpdateSlotsSkillsCost();
-                    return;
+                    return true;
                 }
 
                 if (skill.isUltimate && _currentSkills.Exists(x => x.activeSlot == ULTIMATE_SLOT))
@@ -244,6 +240,7 @@ namespace ProjectFiles.Skills
             }
 
             UpdateSlotsSkillsCost();
+            return true;
         }
         
 
@@ -272,6 +269,7 @@ namespace ProjectFiles.Skills
 
             async void Call()
             {
+                Debug.Log("asdasd");
                 skillsButton[number].interactable = false;
                 await _currentSkill.UseSkill();
                 await Task.Delay((int) (_currentSkill.cooldown[_currentSkill.currentLevel] * 1000));
