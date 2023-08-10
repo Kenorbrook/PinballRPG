@@ -334,8 +334,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathType: 0
-  movementDirection: 1
-  movingTo: 0
   PathElements: []
 --- !u!1001 &1608225589391862976
 PrefabInstance:
