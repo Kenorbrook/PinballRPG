@@ -18,6 +18,8 @@ namespace ProjectFiles.Bosses
 
         [SerializeField]
         private MovementPath _secondPath;
+        [SerializeField]
+        private MovementPath _firstPath;
 
 
         private IEnumerator Start()
@@ -26,6 +28,16 @@ namespace ProjectFiles.Bosses
             StartAnim();
         }
 
+        private void FirstStage()
+        {
+            Spikes[1].SetActive(false);
+            Spikes[2].SetActive(false);
+            Spikes[Spikes.Length - 1].SetActive(false);
+            var _moving = GetComponent<MovingObjectOnPath>();
+            _moving.Path = _firstPath;
+            _moving.Start();
+            _moving.speed = 1;
+        }
 
         private void SecondStage()
         {
@@ -43,7 +55,7 @@ namespace ProjectFiles.Bosses
 
         public override float GetDamage(int hp, int maxHp, float currentScale)
         {
-            if (Math.Abs(hp - maxHp / 4) < 20 && _stage < 3)
+            if ((float)hp/maxHp < .25f && _stage < 3)
             {
                 var _moving = GetComponent<MovingObjectOnPath>();
                 _stage++;
@@ -53,14 +65,14 @@ namespace ProjectFiles.Bosses
                 return currentScale * 3f / 4f;
             }
 
-            if (Math.Abs(hp - maxHp / 2) < 20 && _stage < 2)
+            if ((float)hp/maxHp < .5f && _stage < 2)
             {
                 _stage++;
                 Invoke(nameof(ThirdStage), 0.5f);
                 return currentScale * 3f / 4f;
             }
 
-            if (Math.Abs(hp - maxHp * 3f / 4) >= 20 || _stage > 0) return currentScale;
+            if ((float)hp/maxHp >= .75f || _stage > 0) return currentScale;
 
             _stage++;
             Invoke(nameof(SecondStage), 0.5f);
@@ -77,6 +89,16 @@ namespace ProjectFiles.Bosses
         {
             _wallSpikes.SetActive(false);
             @interface.DisableBossHealth();
+            @interface.KillingBoss();
+        }
+
+        public override void Reset()
+        {
+            _wallSpikes.SetActive(false);
+            @interface.DisableBossHealth();
+            _stage = 0;
+            FirstStage();
+            StartCoroutine(Start());
         }
     }
 }

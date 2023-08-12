@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace ProjectFiles.LevelInfrastructure
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : GamePausedObject
     {
         public static PlayerData playerData;
 
@@ -36,7 +36,7 @@ namespace ProjectFiles.LevelInfrastructure
         private static bool _isGameStarted;
 
         public static List<Level> CurrentLevels =>
-            ((LevelConstructFactory) AllServices.Container.GetSingle<ILevelConstructFactory>())._currentLevels;
+            ((LevelConstructFactory) AllServices.Container.GetSingle<ILevelConstructFactory>()).currentLevels;
 
         public static int Level;
 
@@ -65,6 +65,8 @@ namespace ProjectFiles.LevelInfrastructure
 
         public static void ClickEvent(bool isRight)
         {
+            
+            if(isPause) return;
             if (!_isGameStarted)
             {
                 _isGameStarted = true;
@@ -121,10 +123,20 @@ namespace ProjectFiles.LevelInfrastructure
             LoadMenu();
         }
 
-        public static void LoadMenu()
+        private static void LoadMenu()
         {
             _isGameStarted = false;
             SceneManager.LoadScene("MainMenu");
+        }
+
+
+        protected override void ConfirmPause()
+        {
+            
+        }
+
+        protected override void ConfirmUnPause()
+        {
         }
     }
 }

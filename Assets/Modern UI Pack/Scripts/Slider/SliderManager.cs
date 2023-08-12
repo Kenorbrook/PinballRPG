@@ -29,21 +29,29 @@ namespace Michsky.MUIP
 
         // Events
         [System.Serializable]
-        public class SliderEvent : UnityEvent<float> { }
+        public class SliderEvent : UnityEvent<float>
+        {
+        }
+
         [SerializeField]
         public SliderEvent onValueChanged = new SliderEvent();
-        [Space(8)] public SliderEvent sliderEvent;
+
+        [Space(8)]
+        public SliderEvent sliderEvent;
 
         // Other Variables
-        [HideInInspector] public Animator sliderAnimator;
-        [HideInInspector] public float saveValue;
+        [HideInInspector]
+        public Animator sliderAnimator;
+
+        [HideInInspector]
+        public float saveValue;
 
         void Awake()
         {
             if (enableSaving == true)
             {
-                if (PlayerPrefs.HasKey(sliderTag + "MUIPSliderValue") == false) { saveValue = mainSlider.value; }
-                else { saveValue = PlayerPrefs.GetFloat(sliderTag + "MUIPSliderValue"); }
+                saveValue = PlayerPrefs.GetFloat(sliderTag + "MUIPSliderValue", 100);
+
 
                 mainSlider.value = saveValue;
                 mainSlider.onValueChanged.AddListener(delegate
@@ -59,10 +67,22 @@ namespace Michsky.MUIP
                 UpdateUI();
             });
 
-            try { if (sliderAnimator == null) { sliderAnimator = gameObject.GetComponent<Animator>(); } }
-            catch { }
+            try
+            {
+                if (sliderAnimator == null)
+                {
+                    sliderAnimator = gameObject.GetComponent<Animator>();
+                }
+            }
+            catch
+            {
+            }
 
-            if (invokeOnAwake == true) { sliderEvent.Invoke(mainSlider.value); }
+            if (invokeOnAwake == true)
+            {
+                sliderEvent.Invoke(mainSlider.value);
+            }
+
             UpdateUI();
         }
 
@@ -72,14 +92,28 @@ namespace Michsky.MUIP
             {
                 if (usePercent == true)
                 {
-                    if (valueText != null) { valueText.text = Mathf.Round(mainSlider.value * 1.0f).ToString() + "%"; }
-                    if (popupValueText != null) { popupValueText.text = Mathf.Round(mainSlider.value * 1.0f).ToString() + "%"; }
+                    if (valueText != null)
+                    {
+                        valueText.text = Mathf.Round(mainSlider.value * 1.0f).ToString() + "%";
+                    }
+
+                    if (popupValueText != null)
+                    {
+                        popupValueText.text = Mathf.Round(mainSlider.value * 1.0f).ToString() + "%";
+                    }
                 }
 
                 else
                 {
-                    if (valueText != null) { valueText.text = Mathf.Round(mainSlider.value * 1.0f).ToString(); }
-                    if (popupValueText != null) { popupValueText.text = Mathf.Round(mainSlider.value * 1.0f).ToString(); }
+                    if (valueText != null)
+                    {
+                        valueText.text = Mathf.Round(mainSlider.value * 1.0f).ToString();
+                    }
+
+                    if (popupValueText != null)
+                    {
+                        popupValueText.text = Mathf.Round(mainSlider.value * 1.0f).ToString();
+                    }
                 }
             }
 
@@ -87,14 +121,28 @@ namespace Michsky.MUIP
             {
                 if (usePercent == true)
                 {
-                    if (valueText != null) { valueText.text = mainSlider.value.ToString("F1") + "%"; }
-                    if (popupValueText != null) { popupValueText.text = mainSlider.value.ToString("F1") + "%"; }
+                    if (valueText != null)
+                    {
+                        valueText.text = mainSlider.value.ToString("F1") + "%";
+                    }
+
+                    if (popupValueText != null)
+                    {
+                        popupValueText.text = mainSlider.value.ToString("F1") + "%";
+                    }
                 }
 
                 else
                 {
-                    if (valueText != null) { valueText.text = mainSlider.value.ToString("F1"); }
-                    if (popupValueText != null) { popupValueText.text = mainSlider.value.ToString("F1"); }
+                    if (valueText != null)
+                    {
+                        valueText.text = mainSlider.value.ToString("F1");
+                    }
+
+                    if (popupValueText != null)
+                    {
+                        popupValueText.text = mainSlider.value.ToString("F1");
+                    }
                 }
             }
         }

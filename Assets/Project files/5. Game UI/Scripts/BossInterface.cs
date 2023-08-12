@@ -16,6 +16,10 @@ public class BossInterface : MonoBehaviour
     public void DisableBossHealth()
     {
         _bossHealthBar.gameObject.SetActive(false);
+    }
+
+    public void KillingBoss()
+    {
         _skillChooser.OpenChoseSkillWindow();
     }
     public Slider GetHealthBar()

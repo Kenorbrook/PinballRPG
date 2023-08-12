@@ -33,8 +33,17 @@ namespace ProjectFiles.LevelInfrastructure
 
         private void Start()
         {
-            InitDefaultValues();
             DisableObjectForVariable();
+            InitDefaultValues();
+        }
+
+        public void ResetLevel()
+        {
+            EnemyKilled = 0;
+            foreach (var enemy in _enemies)
+            {
+                enemy.ResetEnemy();
+            }
         }
 
         private void DisableObjectForVariable()

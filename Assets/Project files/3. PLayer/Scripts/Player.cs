@@ -9,7 +9,7 @@ using UnityEngine;
 namespace ProjectFiles.Player
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(TrailRenderer))]
-    public class Player : MonoBehaviour
+    public class Player : GamePausedObject
     {
         public PlayerGameInterface @interface;
         
@@ -119,6 +119,9 @@ namespace ProjectFiles.Player
                 }
 
                 health--;
+                AllServices.Container.GetSingle<ILevelConstructFactory>().GetCurrentLevel().ResetLevel();
+                DisablePlayer();
+                EnablePlayer();
                 _hp = MAX_HEALTH_POINT;
             }
 
@@ -253,6 +256,16 @@ namespace ProjectFiles.Player
         public int InflictedDamage(IChangeHealth enemy)
         {
             return enemy.TakeDamage(damage: (int) (Damage * bonusDamage));
+        }
+
+        protected override void ConfirmPause()
+        {
+            _rb2d.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+
+        protected override void ConfirmUnPause()
+        {
+            _rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace ProjectFiles.Enemies
                 GameManager.StartScore += 100;
               
 
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
             else
             {
@@ -63,6 +63,12 @@ namespace ProjectFiles.Enemies
             currentScale = sprite.transform.localScale.x;
             currentHp = maximumHealth;
             healthBar = GetComponent<IHealthBar>();
+            healthBar.SetDefaultHealth(currentHp,_healthBar);
+        }
+        
+        public override void Reset()
+        {
+            currentHp = maximumHealth;
             healthBar.SetDefaultHealth(currentHp,_healthBar);
         }
     }

@@ -9,5 +9,8 @@ namespace ProjectFiles.Enemies
         public IEnumerator hitAnim();
 
         public void Init(SpriteRenderer spriteRenderer);
+        
+        
+        public void Reset();
     }
 }

@@ -287,7 +287,7 @@ namespace Michsky.MUIP
 
             waitingForDoubleClickInput = true;
             StopCoroutine("CheckForDoubleClick");
-            StartCoroutine("CheckForDoubleClick");
+         if(gameObject.activeSelf)   StartCoroutine("CheckForDoubleClick");
         }
 
         public void OnPointerDown(PointerEventData eventData)

@@ -1,5 +1,4 @@
-﻿using ProjectFiles.LevelInfrastructure;
-using UnityEngine;
+﻿using UnityEngine;
 
 public interface IAssetProvider : IService
 {

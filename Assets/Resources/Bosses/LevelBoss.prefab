@@ -167,6 +167,7 @@ MonoBehaviour:
   - {fileID: 6688091379379060789}
   _wallSpikes: {fileID: 1678101693430083529}
   _secondPath: {fileID: 6033023069542454494}
+  _firstPath: {fileID: 6949715168068814717}
 --- !u!114 &2007384177726019117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,7 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a038c1217d4e268a350029d9fde310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximumHealth: 1000
+  maximumHealth: 100
 --- !u!114 &3984003519582976586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -487,8 +488,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathType: 0
-  movementDirection: 1
-  movingTo: 0
   PathElements:
   - {fileID: 2988869536406530684}
   - {fileID: 730369657734724839}
@@ -639,8 +638,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathType: 1
-  movementDirection: 1
-  movingTo: 0
   PathElements:
   - {fileID: 5465065243385316386}
   - {fileID: 1598047257991626928}
@@ -951,6 +948,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelId: 1
   _enemies: []
+  _levelVariables: []
   height: 12
 --- !u!1 &8739725229531473817
 GameObject:

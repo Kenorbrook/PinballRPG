@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,4 +22,6 @@ public class HealthBarEnemy : MonoBehaviour, IHealthBar
         
         _healthBar.value = currentHp;
     }
+
+  
 }

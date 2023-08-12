@@ -1,4 +1,5 @@
-﻿using ProjectFiles.Bosses;
+﻿using System;
+using ProjectFiles.Bosses;
 using UnityEngine;
 
 namespace ProjectFiles.Enemies
@@ -12,5 +13,7 @@ namespace ProjectFiles.Enemies
         public abstract void StartAnim();
         
         public abstract void EndAnim();
+
+        public abstract void Reset();
     }
 }

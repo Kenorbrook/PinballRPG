@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ProjectFiles.MovingObjects
 {
-    public class MovingObjectOnPath : MonoBehaviour
+    public class MovingObjectOnPath : GamePausedObject
     {
         public enum MovementType
         {
@@ -18,7 +18,7 @@ namespace ProjectFiles.MovingObjects
 
         private IEnumerator<Transform> _pointInPath;
 
-
+        
         public void Start()
         {
             if (Path == null)
@@ -35,6 +35,7 @@ namespace ProjectFiles.MovingObjects
 
         private void Update()
         {
+            if(isPause) return;
             if (_pointInPath == null || _pointInPath.Current == null)
             {
                 return;
@@ -56,6 +57,16 @@ namespace ProjectFiles.MovingObjects
             {
                 _pointInPath.MoveNext();
             }
+        }
+
+        protected override void ConfirmPause()
+        {
+            
+        }
+
+        protected override void ConfirmUnPause()
+        {
+            
         }
     }
 }

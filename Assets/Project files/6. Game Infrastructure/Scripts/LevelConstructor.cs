@@ -15,22 +15,27 @@ namespace ProjectFiles.LevelInfrastructure
         private static Random Rand => new Random(DateTime.Now.Millisecond);
 
         private Camera _mainCamera;
-        private static bool isBossLevel => GameManager.Level % FREQUENCY_BOSS_ROOM == 0 && GameManager.Level > 0;
+        private static bool isBossLevel => (GameManager.Level-_tutorialLevel) % FREQUENCY_BOSS_ROOM == 0 && GameManager.Level-_tutorialLevel > 0;
 
         private const int FREQUENCY_BOSS_ROOM = 2;
 
-        private readonly ILevelConstructFactory _levelFactory = AllServices.Container.GetSingle<ILevelConstructFactory>();
+        private readonly ILevelConstructFactory _levelFactory =
+            AllServices.Container.GetSingle<ILevelConstructFactory>();
+
+        private static int _tutorialLevel;
         private void Awake()
         {
             InitDefaultValue();
         }
 
         private static BossInterface _bossInterface;
-        public static void Construct(BossInterface bossInterface)
+
+        public static void Construct(BossInterface bossInterface, int tutorialLevel =0)
         {
             _bossInterface = bossInterface;
+            _tutorialLevel = tutorialLevel;
         }
-        
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.GetComponent<Player.Player>() == null) return;
@@ -52,12 +57,12 @@ namespace ProjectFiles.LevelInfrastructure
             NewLevelCollider.enabled = false;
 
             isBossFight = isBossLevel;
-            if (isBossFight) _levelFactory.CreateRandomBossLevel(Levels,_bossInterface); else _levelFactory.CreateRandomLevel(Levels);
+            if (GameManager.Level >= _levelFactory.GetLevelCount())
+                if (isBossFight) _levelFactory.CreateRandomBossLevel(Levels, _bossInterface);
+                else _levelFactory.CreateRandomLevel(Levels);
 
             StartCoroutine(_mainCamera.GetComponent<TransformationCamera>().MoveCamera());
             //DestroyPreviousLevel();
         }
-        
-       
     }
 }

@@ -36,7 +36,7 @@ public class GameSceneState : IState
         GameObject _hud = gameFactory.CreateHud();
         gameFactory.CreatePlayer(initialPoint).@interface = _hud.GetComponent<PlayerGameInterface>();
         GameManager.StartScore = 0;
-        LevelConstructor.Construct(_hud.GetComponent<BossInterface>());
+        LevelConstructor.Construct(_hud.GetComponent<BossInterface>(), isTutorial?0:1);
         gameFactory.CreateSkillData();
         if (isTutorial)
             levelFactory.CreateStartLevel(levelContainer.transform);

@@ -6,30 +6,30 @@ namespace ProjectFiles.Enemies
 {
     public class BossChangeHealth:Heath
     {
-        private int _currentHp;
         private IHealthBar _healthBar;
         private Boss _boss;
 
+        private float startScale;
         public override int TakeDamage(int damage)
         {
             int takenDamage;
           
 
-            _currentHp -= damage;
+            currentHp -= damage;
             
-            currentScale = _boss.GetDamage(_currentHp,maximumHealth, currentScale);
+            currentScale = _boss.GetDamage(currentHp,maximumHealth, currentScale);
             
-            _healthBar.GetHit(_currentHp);
-            if (_currentHp <= 0)
+            _healthBar.GetHit(currentHp);
+            if (currentHp <= 0)
             {
-                takenDamage = _currentHp + damage;
+                takenDamage = currentHp + damage;
                 GetComponentInParent<Level>().EnemyKilled++;
                 GameManager.StartScore += 1000 ;
                 
                 _boss.EndAnim();
                 
 
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
             else
             {
@@ -66,10 +66,20 @@ namespace ProjectFiles.Enemies
         {
             sprite = spriteRenderer;
             currentScale = sprite.transform.localScale.x;
-            _currentHp = maximumHealth;
+            startScale = currentScale;
+            currentHp = maximumHealth;
             _boss = GetComponent<Boss>();
             _healthBar = GetComponent<IHealthBar>();
-            _healthBar.SetDefaultHealth(_currentHp, _boss.@interface.GetHealthBar());
+            _healthBar.SetDefaultHealth(currentHp, _boss.@interface.GetHealthBar());
+        }
+
+        public override void Reset()
+        {
+            currentHp = maximumHealth;
+            currentScale = startScale;
+            sprite.transform.localScale =new Vector3(currentScale, currentScale, currentScale);
+            _healthBar.SetDefaultHealth(currentHp, _boss.@interface.GetHealthBar());
+            _boss.Reset();
         }
     }
 }

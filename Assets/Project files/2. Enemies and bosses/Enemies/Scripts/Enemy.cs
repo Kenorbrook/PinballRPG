@@ -17,6 +17,11 @@ namespace ProjectFiles.Enemies
             SetDefaultValues();
         }
 
+        public void ResetEnemy()
+        {
+            _changeHealth.Reset();
+            gameObject.SetActive(true);
+        }
         private void SetDefaultValues()
         {
             _changeHealth.Init(_sprite);

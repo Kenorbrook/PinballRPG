@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace ProjectFiles.Enemies
@@ -17,5 +18,7 @@ namespace ProjectFiles.Enemies
         public abstract IEnumerator hitAnim();
 
         public abstract void Init( SpriteRenderer spriteRenderer);
+
+        public abstract void Reset();
     }
 }
