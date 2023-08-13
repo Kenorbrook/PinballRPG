@@ -1,91 +1,61 @@
+using System.Globalization;
 using ProjectFiles.Skills;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class InfoSkillPanel : MonoBehaviour
 {
-    [SerializeField]
-    private Image _skillImage;
 
     [SerializeField]
-    private Text _name;
-
-    [SerializeField]
-    private Text _description;
-
+    private Text _skillName;
     [SerializeField]
     private Text[] _cost;
-
     [SerializeField]
     private Text[] _duration;
-
     [SerializeField]
     private Text[] _cooldown;
 
-    private Skill _currentSkill;
+    [SerializeField]
+    private Image _skillImage;
+    [SerializeField]
+    private Image _ultImage;
+    [SerializeField]
+    private GameObject _skillObj;
+    [SerializeField]
+    private GameObject _ultObj;
 
     [SerializeField]
-    private Image[] _currentLevel;
+    private GameObject[] _blocks;
+    [SerializeField]
+    private Button[] _replaceSkill;
 
     [SerializeField]
-    private GameObject _buySkillButton;
-
-    [SerializeField]
-    private GameObject _upgradeSkillButton;
-
     private SessionSkillChooser _skillChooser;
-
-
-    public void Init(SessionSkillChooser skillChooser)
-    {
-        _skillChooser = skillChooser;
-    }
-
     public void OpenInfoPanel(Skill skill)
     {
-        _currentSkill = skill;
+        for (var slotNumber = 0; slotNumber < 3; slotNumber++)
+        {
+            _replaceSkill[slotNumber].onClick.RemoveAllListeners();
+            int _number = slotNumber;
+            _replaceSkill[slotNumber].onClick.AddListener(()=>_skillChooser.ReplaceSkillInSlot(skill,_number));
+        }
+
+        _skillName.text = skill.skillName;
+        _skillObj.SetActive(!skill.isUltimate);
+        _ultObj.SetActive(skill.isUltimate);
+        _blocks[0].SetActive(skill.isUltimate);
+        _blocks[1].SetActive(skill.isUltimate);
+        _blocks[2].SetActive(!skill.isUltimate);
+        if (skill.isUltimate)
+            _ultImage.sprite = skill.sprite;
+        else
+            _skillImage.sprite = skill.sprite;
+        for (int number = 0; number < 3; number++)
+        {
+            _cooldown[number].text = skill.cooldown[number].ToString(CultureInfo.CurrentCulture);
+            _duration[number].text = skill.duration[number].ToString(CultureInfo.CurrentCulture);
+            _cost[number].text = skill.GetCost(number).ToString(CultureInfo.CurrentCulture);
+        }
         gameObject.SetActive(true);
-        _buySkillButton.SetActive(skill.currentLevel == -1);
-        _upgradeSkillButton.SetActive(skill.currentLevel >= 0);
-        SetDefaultValue();
-    }
-
-    public void CloseInfoPanel()
-    {
-        foreach (var _image in _currentLevel)
-        {
-            _image.enabled = false;
-        }
-
-        gameObject.SetActive(false);
-    }
-
-    public void BuySkill()
-    {
-        if (_skillChooser.BuySkill(_currentSkill))
-            _buySkillButton.SetActive(false);
-    }
-
-    public void UpgradeSkill()
-    {
-        if (_skillChooser.BuySkill(_currentSkill))
-            _upgradeSkillButton.SetActive(false);
-    }
-
-    private void SetDefaultValue()
-    {
-        _skillImage.sprite = _currentSkill.sprite;
-
-
-        _name.text = _currentSkill.skillName;
-        if (_currentSkill.currentLevel >= 0)
-            _currentLevel[_currentSkill.currentLevel].enabled = true;
-        _description.text = _currentSkill.description;
-        for (int level = 0; level < 3; level++)
-        {
-            _cost[level].text = _currentSkill.GetCost(level).ToString();
-            _duration[level].text = _currentSkill.duration[level].ToString();
-            _cooldown[level].text = _currentSkill.cooldown[level].ToString();
-        }
     }
 }

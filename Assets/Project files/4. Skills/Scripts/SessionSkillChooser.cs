@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ProjectFiles.LevelInfrastructure;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace ProjectFiles.Skills
         private const int ULTIMATE_SLOT = 2;
 
         [SerializeField]
-        private InfoSkillPanel _infoSkillPanel;
+        private InfoShopSkillPanel _infoSkillPanel;
         [SerializeField]
         private GameObject _chooseSkillPanel;
         [SerializeField]
@@ -56,12 +57,15 @@ namespace ProjectFiles.Skills
 
         private const string NULL_COST_TEXT = "0_0";
 
+        [SerializeField]
+        private InfoSkillPanel _skillPanel;
+
         private event Action OpenSkillsSlot;
         private int _choosenSkill;
 
         private void Start()
         {
-            _infoSkillPanel.Init(this);
+            _infoSkillPanel.Init(this, _skillPanel);
             _slotSkillId = new int[3];
             _slotSkills = new Skill[3];
             _currentSkills = new List<Skill>();
@@ -247,8 +251,9 @@ namespace ProjectFiles.Skills
         private void AddNewSkillInSlot(int newSkillId, int slot = DefaultNUllNumber)
         {
             Skill _currentSkill = SkillsData.GetSkillFromId(newSkillId);
+            Debug.Log($"Skill {_currentSkill.name} try to add");
             var number = slot;
-            if (slot == DefaultNUllNumber || !skillsButton[number].gameObject.activeSelf)
+            if (slot == DefaultNUllNumber || !skillsButton[slot].gameObject.activeSelf)
             {
                 _allPlayerSkill.Add(_currentSkill);
                 number = slot switch
@@ -269,7 +274,7 @@ namespace ProjectFiles.Skills
 
             async void Call()
             {
-                Debug.Log("asdasd");
+                Debug.Log($"Use skill {_currentSkill.name}");
                 skillsButton[number].interactable = false;
                 await _currentSkill.UseSkill();
                 await Task.Delay((int) (_currentSkill.cooldown[_currentSkill.currentLevel] * 1000));
@@ -279,15 +284,16 @@ namespace ProjectFiles.Skills
             skillsButton[number].onClick.RemoveAllListeners();
             skillsButton[number].onClick.AddListener(Call);
             _skillImage[number].sprite = _currentSkill.sprite;
+            Debug.Log("Skill added");
         }    
         private void RemoveSkillFromSlot(Skill removedSkill, int slot = DefaultNUllNumber)
         {
-
             _currentSkills.Remove(removedSkill);
 
             skillsButton[slot].onClick.RemoveAllListeners();
             skillsButton[slot].gameObject.SetActive(false);
             removedSkill.activeSlot = -1;
+            Debug.Log("Skill removed");
             
         }
 
@@ -298,13 +304,23 @@ namespace ProjectFiles.Skills
         }
 
 
-        private void ReplaceSkill(int newSkillId, int oldSkillId)
+        public void ReplaceSkillInSlot(Skill newSkill, int slot)
         {
-            Skill oldSkill = _currentSkills.Find(x => x.Id == oldSkillId);
-            Skill newSkill = SkillsData.GetSkillFromId(newSkillId);
+            
+            if (_currentSkills.Any(skill => skill.Id == newSkill.Id)) return;
+            
+            Skill oldSkill = _currentSkills[slot];
+            if (oldSkill == null)
+            {
+                AddNewSkillInSlot(newSkill.Id, slot);
+                return;
+            }
+
+            
+            
             if ((oldSkill.isUltimate && !newSkill.isUltimate) || (!oldSkill.isUltimate && newSkill.isUltimate)) return;
-            RemoveSkillFromSlot(oldSkill);
-            AddNewSkillInSlot(newSkillId, oldSkill.activeSlot);
+            RemoveSkillFromSlot(oldSkill,slot);
+            AddNewSkillInSlot(newSkill.Id, slot);
         }
     }
 }
