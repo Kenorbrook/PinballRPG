@@ -19,12 +19,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: -1255213315354845247, guid: 9d98e9be0dbe8cb4e806782e2c8fde19, type: 3}
-        m_TargetAssemblyTypeName: SkillsData, Assembly-CSharp
+        m_TargetAssemblyTypeName: ProjectFiles.Skills.SkillsData, Assembly-CSharp
         m_MethodName: BerserkSkill
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000}
-          m_ObjectArgumentAssemblyTypeName: Skill, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: ProjectFiles.Skills.Skill, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -45,8 +45,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  isUltimate: 0
   skillName: Berserk
+  isUltimate: 0
   cooldown:
   - 16
   - 14
@@ -59,4 +59,5 @@ MonoBehaviour:
   - 0.4
   - 0.5
   - 0.6
+  description: 
   cost: f401000058020000bc020000

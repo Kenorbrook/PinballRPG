@@ -17,7 +17,7 @@ namespace ProjectFiles.LevelInfrastructure
         private Camera _mainCamera;
         private static bool isBossLevel => (GameManager.Level-_tutorialLevel) % FREQUENCY_BOSS_ROOM == 0 && GameManager.Level-_tutorialLevel > 0;
 
-        private const int FREQUENCY_BOSS_ROOM = 2;
+        private const int FREQUENCY_BOSS_ROOM = 4;
 
         private readonly ILevelConstructFactory _levelFactory =
             AllServices.Container.GetSingle<ILevelConstructFactory>();
@@ -46,6 +46,7 @@ namespace ProjectFiles.LevelInfrastructure
         {
             _mainCamera = Camera.main;
             NewLevelCollider = GetComponent<BoxCollider2D>();
+            NewLevelCollider.offset -= new Vector2(0,((float) Screen.height / Screen.width-2)>0?100:0);
             isBossFight = false;
         }
 

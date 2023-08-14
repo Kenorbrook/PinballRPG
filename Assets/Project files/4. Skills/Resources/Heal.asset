@@ -19,12 +19,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: -1255213315354845247, guid: 9d98e9be0dbe8cb4e806782e2c8fde19, type: 3}
-        m_TargetAssemblyTypeName: SkillsData, Assembly-CSharp
+        m_TargetAssemblyTypeName: ProjectFiles.Skills.SkillsData, Assembly-CSharp
         m_MethodName: HealSkill
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000}
-          m_ObjectArgumentAssemblyTypeName: Skill, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: ProjectFiles.Skills.Skill, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -45,8 +45,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  isUltimate: 0
   skillName: Heal
+  isUltimate: 0
   cooldown:
   - 30
   - 40
@@ -59,4 +59,5 @@ MonoBehaviour:
   - 5
   - 6
   - 7
+  description: 
   cost: 5802000020030000e8030000

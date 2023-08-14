@@ -15,7 +15,9 @@ namespace ProjectFiles.LevelInfrastructure
 
         [SerializeField]
         private List[] _levelVariables;
-
+        
+        public Vector3 spawnPoint;
+        
         public int height;
         private bool IsAllEnemyKilled => EnemyKilled == _enemies.Length;
 
@@ -59,6 +61,7 @@ namespace ProjectFiles.LevelInfrastructure
 
         private void InitDefaultValues()
         {
+            spawnPoint = new Vector3(0, transform.position.y - 3.5f, 0);
             _enemies = GetComponentsInChildren<Enemy>();
             EnemyKilled = 0;
             checkEndOfRound();

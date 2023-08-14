@@ -35,7 +35,7 @@ namespace ProjectFiles.Enemies
 
         public override IEnumerator hitAnim()
         {
-            float animSpeed = currentScale / 100;
+            float animSpeed = currentScale*3;
            
             var _vec = new Vector3(animSpeed, animSpeed, 0);
             var _endScale = currentScale * 1.3f;
@@ -43,13 +43,13 @@ namespace ProjectFiles.Enemies
 
             while (sprite.transform.localScale.x < _endScale)
             {
-                sprite.transform.localScale += _vec;
+                sprite.transform.localScale += _vec*Time.deltaTime;
                 yield return null;
             }
 
             while (sprite.transform.localScale.x > currentScale)
             {
-                sprite.transform.localScale -= _vec;
+                sprite.transform.localScale -= _vec*Time.deltaTime;
                 yield return null;
             }
 

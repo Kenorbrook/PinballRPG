@@ -121,7 +121,7 @@ namespace ProjectFiles.Player
                 health--;
                 AllServices.Container.GetSingle<ILevelConstructFactory>().GetCurrentLevel().ResetLevel();
                 DisablePlayer();
-                EnablePlayer();
+                EnablePlayer(GameManager.CurrentLevels[GameManager.Level].spawnPoint);
                 _hp = MAX_HEALTH_POINT;
             }
 
@@ -171,13 +171,11 @@ namespace ProjectFiles.Player
         }
 
 
-        public static void EnablePlayer()
+        public static void EnablePlayer(Vector3 spawnPosition)
         {
             player.gameObject.SetActive(true);
             player.transform.position =
-                new Vector3(0,
-                    TransformationCamera.mainCamera.transform.position.y -
-                    TransformationCamera.mainCamera.orthographicSize + 0.5f, 0);
+                spawnPosition;
             player.TrailEmitting();
         }
 

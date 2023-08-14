@@ -38,7 +38,7 @@ namespace ProjectFiles.LevelInfrastructure
                 yield return null;
             }
 
-            Player.Player.EnablePlayer();
+            Player.Player.EnablePlayer(GameManager.CurrentLevels[GameManager.Level].spawnPoint);
         }
     }
 }
