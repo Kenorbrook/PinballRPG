@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ProjectFiles.MainMenu;
 using ProjectFiles.MovingObjects;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,6 +12,7 @@ namespace ProjectFiles.LevelInfrastructure
     {
         public static PlayerData playerData;
 
+        private const string MAIN_MENU_SCENE = "MainMenu";
         public static int Record
         {
             get => playerData.record;
@@ -34,6 +36,7 @@ namespace ProjectFiles.LevelInfrastructure
         private static int _startScore;
         public static GameManager instance;
         private static bool _isGameStarted;
+        public static bool isReverse;
 
         public static List<Level> CurrentLevels =>
             ((LevelConstructFactory) AllServices.Container.GetSingle<ILevelConstructFactory>()).currentLevels;
@@ -62,6 +65,12 @@ namespace ProjectFiles.LevelInfrastructure
             score = _score;
         }
 
+        private void Start()
+        {
+            
+            UnPause();
+        }
+
 
         public static void ClickEvent(bool isRight)
         {
@@ -72,8 +81,8 @@ namespace ProjectFiles.LevelInfrastructure
                 _isGameStarted = true;
             }
 
+            isRight = isReverse ? !isRight : isRight;
             Player.Player.player.GoUp(isRight ? 1 : -1);
-            
             PlayHintAnim(isRight);
         }
 
@@ -126,7 +135,7 @@ namespace ProjectFiles.LevelInfrastructure
         private static void LoadMenu()
         {
             _isGameStarted = false;
-            SceneManager.LoadScene("MainMenu");
+            SceneLoaderFromMenu.stateMachine.Enter<LoadLevelState, string>(MAIN_MENU_SCENE);
         }
 
 

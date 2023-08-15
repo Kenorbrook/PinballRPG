@@ -6,11 +6,10 @@ public class ExpandLevels : MonoBehaviour
     void Awake()
     {
         Debug.Log("sh/sw = " +(float)Screen.height / Screen.width);
-        if ((float)Screen.height / Screen.width > 2)
-        {
-            float scale = 3 - (float) Screen.height / Screen.width;
+        
+            float scale = 2.0119f*Screen.width / Screen.height + 0.0131f;
             GetComponent<Transform>().localScale = new Vector3(scale ,scale,1);
-        }
+        
     }
 
 }

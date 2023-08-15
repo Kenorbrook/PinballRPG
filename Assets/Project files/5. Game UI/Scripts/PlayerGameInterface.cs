@@ -1,6 +1,8 @@
 using System;
+using Michsky.MUIP;
 using ProjectFiles.LevelInfrastructure;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class PlayerGameInterface : MonoBehaviour
@@ -16,7 +18,7 @@ public class PlayerGameInterface : MonoBehaviour
     [SerializeField]
     private Button _pauseButton;
     [SerializeField]
-    private Button _endRoundButton;
+    private ModalWindowManager _endRoundButton;
 
     [SerializeField]
     private Animator _animator;
@@ -25,16 +27,11 @@ public class PlayerGameInterface : MonoBehaviour
 
     private void Start()
     {
-        _endRoundButton.onClick.AddListener(GameManager.LoseGame);
+        _endRoundButton.onConfirm.AddListener(GameManager.LoseGame);
         _pauseButton.onClick.AddListener(GamePausedObject.TogglePause);
         _pauseButton.onClick.AddListener(ToggleAnimation);
     }
 
-    private void ToggleAnimation()
-    {
-        bool isPause = _animator.GetBool(pause);
-        _animator.SetBool(pause, !isPause);
-    }
 
     public void UpdatePoint(int point)
     {
@@ -51,5 +48,9 @@ public class PlayerGameInterface : MonoBehaviour
             _health[health].enabled = health < count;
         }
     }
-
+    private void ToggleAnimation()
+    {
+        bool isPause = _animator.GetBool(pause);
+        _animator.SetBool(pause, !isPause);
+    }
 }

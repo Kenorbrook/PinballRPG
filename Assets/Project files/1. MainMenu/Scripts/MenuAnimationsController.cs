@@ -1,5 +1,6 @@
 using System;
 using Michsky.MUIP;
+using ProjectFiles.LevelInfrastructure;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,9 +14,12 @@ namespace ProjectFiles.MainMenu
         [SerializeField]
         private ButtonManager _removeAds;
 
+
         private IPurchaseProvider _purchaseProvider;
 
         private static readonly int setting = Animator.StringToHash("setting");
+
+   
 
         private void Awake()
         {
@@ -28,7 +32,11 @@ namespace ProjectFiles.MainMenu
             {
                 _removeAds.onClick.AddListener(_purchaseProvider.BuyRemoveAds);
             }
+
+            
         }
+
+        
 
         private void OnEnable()
         {
@@ -48,6 +56,12 @@ namespace ProjectFiles.MainMenu
         public void ChangeSetting()
         {
             _menuAnimator.SetBool(setting, !_menuAnimator.GetBool(setting));
+        }
+
+        public void DeleteAllProgress()
+        {
+            PlayerPrefs.DeleteAll();
+            SceneLoaderFromMenu.stateMachine.Enter<BootstrapState>();
         }
     }
 }

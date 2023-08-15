@@ -861,7 +861,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.19582713, y: 0.24584123}
+  m_Offset: {x: -0.19, y: 0.24584123}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -887,7 +887,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.1958271, y: 0.24376112}
+  m_Offset: {x: 0.19, y: 0.24376112}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -949,6 +949,7 @@ MonoBehaviour:
   LevelId: 1
   _enemies: []
   _levelVariables: []
+  spawnPoint: {x: 0, y: 0, z: 0}
   height: 12
 --- !u!1 &8739725229531473817
 GameObject:
